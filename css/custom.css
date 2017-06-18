@@ -11,3 +11,7 @@ and open the template in the editor.
 .container{
     padding-bottom: 100px;
 }
+
+.left-align{
+    text-align: left !important;
+}
