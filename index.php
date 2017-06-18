@@ -55,6 +55,7 @@ class FrontController {
                 $p = DbManager::instance()->getParticipantById($partId);
                 if(FrontController::populateParticipant($p, $request)){
                     DbManager::instance()->updateParticipant($p);
+                    DbManager::instance()->lazyLoadParticipant($p);
                     $workshops = DbManager::instance()->getWorkshopsByConfId($p->getRegType()->conference_id);
                     $extras = DbManager::instance()->getExtraByConfId($p->getRegType()->conference_id);
                     FrontController::loadWorkshopExtraStep($keys, $p, $workshops, $extras);
@@ -212,14 +213,13 @@ class FrontController {
         if(isset($request["otherDiet"])){
             $p->additionaldiet = $request["otherDiet"];
         }
+        $p->ipaddress = $_SERVER['REMOTE_ADDR'];
         return $ok;
      }
      
      public static function addWorkshopExtra($p, &$request){
-         DbManager::instance()->deleteExtras($p->id);
-         DbManager::instance()->deleteWorkshops($p->id);
-         
          if(isset($request["w"])){
+            DbManager::instance()->deleteWorkshops($p->id);
             foreach($request["w"] as $w){
                 $wid = str_replace("w", "", $w);
                 DbManager::instance()->insertWorkshop($p->id, $wid);
@@ -227,6 +227,7 @@ class FrontController {
          }
          
          if(isset($request["e"])){
+             DbManager::instance()->deleteExtras($p->id);
             foreach($request["e"] as $e){
                 $eid = str_replace("e", "", $e);
                 DbManager::instance()->insertExtra($p->id, $eid);
@@ -251,6 +252,10 @@ class Keys{
     public $email;
     public $regId;
     public $participantId;
+    // test
+    public $numeraUrl = 'https://testnpgw.numera.it/npgw3/www/numgwp1.asp';
+    // produzione
+    // public $numeraUrl = 'https://npgw.numera.it/npgw3/www/numgwp1.asp';
 }
 
 ?>

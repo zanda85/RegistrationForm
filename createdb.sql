@@ -16,6 +16,7 @@ CREATE TABLE `conference` (
   `title` varchar(128) COLLATE utf8_bin NOT NULL,
   `code` varchar(128) COLLATE utf8_bin NOT NULL,
   `open` int(11) NOT NULL
+  `vendor` varchar(256)
 );
 
 ALTER TABLE `conference`
@@ -103,7 +104,10 @@ create table participant(
     wheatfree smallint, 
     soyfree smallint,
     additionaldiet varchar(512),
-    state int
+    state int,
+    ipaddress varchar(128),
+    closed date,
+    otp varchar(128)
 );
 
 ALTER TABLE `participant`

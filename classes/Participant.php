@@ -40,6 +40,8 @@ class Participant {
     public $wheatfree = 0;
     public $soyfree = 0;
     public $additionaldiet;
+    public $ipaddress;
+    public $otp;
     
     // state 0 = not paid
     // state 1 = paid

@@ -11,10 +11,12 @@
  *
  * @author davide
  */
-include_once 'classes/RegType.php';
-include_once 'classes/Participant.php';
-include_once 'classes/Workshop.php';
-include_once 'classes/Extra.php';
+include_once 'RegType.php';
+include_once 'Participant.php';
+include_once 'Workshop.php';
+include_once 'Extra.php';
+include_once 'Conference.php';
+
 
 
 class DbManager {
@@ -137,6 +139,8 @@ class DbManager {
                         p.soyfree,
                         p.additionaldiet,
                         p.state,
+                        p.ipaddress,
+                        p.otp,
                         r.id, 
                         r.conference_id, 
                         r.title,
@@ -197,6 +201,8 @@ class DbManager {
                 $p->soyfree,
                 $p->additionaldiet,
                 $p->state,
+                $p->ipaddress,
+                $p->otp,
                 $regtype->id, 
                 $regtype->conference_id,
                 $regtype->title,
@@ -404,7 +410,8 @@ class DbManager {
                         wheatfree = ?, 
                         soyfree = ?,
                         additionaldiet = ?,
-                        state = ?
+                        state = ?,
+                        ipaddress = ?
                         where id = ?";
         
         $stmt = $mysqli->stmt_init();
@@ -415,7 +422,7 @@ class DbManager {
         }
         
         $ok = $stmt->bind_param(
-                'sssssssssssssssiiiiiiiiiisii',
+                'sssssssssssssssiiiiiiiiiisisi',
                 $p->email,
                 $p->prefix,
                 $p->firstname,
@@ -443,6 +450,7 @@ class DbManager {
                 $p->soyfree,
                 $p->additionaldiet,
                 $p->state,
+                $p->ipaddress,
                 $p->id);
         if(!$ok) {goto error;}
         
@@ -796,6 +804,91 @@ class DbManager {
             error_log("[DbManager] error on database access ");
             $mysqli->close();
             return $workshops;
+        }
+    }
+    
+    public function getConferenceById($conf_id){
+        $mysqli = $this->getConnection();
+        $extras = array();
+        
+        $query= "select conference.id, 
+                        conference.title, 
+                        conference.code,
+                        conference.vendor,
+                        conference.open
+                        from conference
+                        where conference.id = ?";
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare($query);
+            
+        if (!$stmt) {
+            goto error;
+        }
+        
+        $conf_id = filter_var($conf_id, FILTER_VALIDATE_INT) ? $conf_id : -1;
+        $ok = $stmt->bind_param(
+                 'i',
+                 $conf_id);
+        if(!$ok) {goto error;}
+        
+        $ok = $stmt->execute();
+        if(!$ok) {goto error;}
+        
+        $c = new Conference();
+        
+        $stmt->bind_result(
+                $c->id, 
+                $c->title,
+                $c->code,
+                $c->vendor,
+                $c->open);
+        
+        if (!$stmt->fetch()){
+            goto error;
+        }
+        
+        $mysqli->close();
+        return $c;
+        
+        error: {
+            error_log("[DbManager] error on database access ");
+            $mysqli->close();
+            return $extras;
+        }
+    }
+    
+    public function setOtp($id, $otp){
+         $mysqli = $this->getConnection();
+        
+        $query = "update participant set
+                        otp = ?
+                        where id = ?";
+        
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare($query);
+            
+        if (!$stmt) {
+            goto error;
+        }
+        
+        $ok = $stmt->bind_param(
+                'si',
+                $otp,
+                $id);
+        if(!$ok) {goto error;}
+        
+        $ok = $stmt->execute();
+        if(!$ok) {goto error;}
+        
+        $ok = ($mysqli->affected_rows == 1);
+        $mysqli->close();
+        
+        return $ok;
+        
+        error: {
+            error_log("[DbManager] error on database access ");
+            $mysqli->close();
+            return false;
         }
     }
     

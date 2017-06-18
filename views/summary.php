@@ -45,10 +45,14 @@
                     
                     
                 </div>
+                <!-- TODO eliminare prima di inviare a numera -->
                 <input type="hidden" name="step" value="s4">
                 <input type="hidden" name="conf" value="<?= $keys->conf ?>">
                 <input type="hidden" name="partId" value="<?= $p->id ?>">
-                <button id="continue" type="submit" class="btn btn-success center-block">Pay <?=$p->getTotalCost() ?>€</button>
+                <!-- input per numera -->
+                <input type="hidden" name="pol_vendor" value="<?= $keys->vendor ?>">
+                <input type="hidden" name="pol_keyord" value="<?= $p->id ?>">
+                <button id="continue" type="submit" class="btn btn-success center-block">Pay with credit card (<?=$p->getTotalCost() ?>€)</button>
                 
             </form>
         </div>
