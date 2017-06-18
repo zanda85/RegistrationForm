@@ -15,6 +15,7 @@ class Script3 {
              $p = DbManager::instance()->getParticipantById($request['keyord']);
              if($p != null && $p->otp == $request['otp']){
                  $code = 0; 
+                 DbManager::instance()->finalisePayment($p->id);
              }else{
                  $code = 1;
              }

@@ -9,52 +9,68 @@
         <link rel="stylesheet" href="css/bootstrap-theme.min.css" >
         <link rel="stylesheet" href="css/custom.css" >
         <script src="js/bootstrap.min.js"></script>
-        
+
         <script src="js/personal.js"></script>
     </head>
     <body>
         <div class="container">
-            
-            <form class="form-horizontal" method="post" action="index.php">
+
+            <?php if ($state == "nok" || $state == "pay") { ?>
+                <form class="form-horizontal" method="post" action="<?= $keys->numeraUrl ?>">
+                <?php } ?>
                 <img src="<?= $keys->logo ?>" alt="conference logo" class="img-fluid" style="width: 100%"/>
-                
+
+
+                <?php if ($state == "nok") { ?>
+                <div class="alert alert-warning" style="margin-top:10px">
+                        <strong>Warning!</strong> The registration payment did not complete successfully.  
+                    </div>
+                <?php } ?>
+                <?php if ($state == "ok") { ?>
+                <div class="alert alert-success" style="margin-top:10px">
+                        <strong>Success!</strong> The registration is completed.  
+                    </div>
+                <?php } ?>
                 <h2>Registration summary</h2>
                 <div class="well">
                     <h3>Personal Info</h3>
-                    <?=$p->prefix ?> <?=$p->firstname ?> <?=$p->middlename ?> <?=$p->lastname ?> <br/>
-                    <?=$p->company ?> <br/>
-                    <?=$p->addressline1 ?> <?=$p->addressline2 ?>, <?=$p->zip ?>, <?=$p->city ?>, <?=$p->country ?><br/>
-                    
+                    <?= $p->prefix ?> <?= $p->firstname ?> <?= $p->middlename ?> <?= $p->lastname ?> <br/>
+                    <?= $p->company ?> <br/>
+                    <?= $p->addressline1 ?> <?= $p->addressline2 ?>, <?= $p->zip ?>, <?= $p->city ?>, <?= $p->country ?><br/>
+
                     <h3>Dietary requirements</h3>
                     <?= $p->getDietaryString() ?>
-                    
+
                     <h3>Fees</h3>
                     <ul>
-                        <li><?=$p->getRegType()->title ?> (<?=$p->getRegType()->cost ?> €)</li>
+                        <li><?= $p->getRegType()->title ?> (<?= $p->getRegType()->cost ?> €)</li>
                         <?php foreach ($p->getWorkshops() as $w) { ?>
-                        <li><?=$w->title ?> </li>
+                            <li><?= $w->title ?> </li>
                         <?php } ?>
                         <?php foreach ($p->getExtras() as $e) { ?>
-                        <li><?=$e->title ?> (<?=$e->cost ?> €)</li>
+                            <li><?= $e->title ?> (<?= $e->cost ?> €)</li>
                         <?php } ?>
                     </ul>
-                    <strong style="font-size:2.0em">Total: <?=$p->getTotalCost() ?>€ </strong>
-                    
-                    
-                    
-                    
-                    
+                    <strong style="font-size:2.0em">Total: <?= $p->getTotalCost() ?>€ </strong>
+
+
+
+
+
                 </div>
-                <!-- TODO eliminare prima di inviare a numera -->
-                <input type="hidden" name="step" value="s4">
-                <input type="hidden" name="conf" value="<?= $keys->conf ?>">
-                <input type="hidden" name="partId" value="<?= $p->id ?>">
-                <!-- input per numera -->
-                <input type="hidden" name="pol_vendor" value="<?= $keys->vendor ?>">
-                <input type="hidden" name="pol_keyord" value="<?= $p->id ?>">
-                <button id="continue" type="submit" class="btn btn-success center-block">Pay with credit card (<?=$p->getTotalCost() ?>€)</button>
-                
-            </form>
+
+
+                <?php if ($state == "nok" || $state == "pay") { ?>  
+                    <!-- TODO eliminare prima di inviare a numera -->
+                    <input type="hidden" name="step" value="s4">
+                    <input type="hidden" name="conf" value="<?= $keys->conf ?>">
+                    <input type="hidden" name="partId" value="<?= $p->id ?>">
+                    <!-- input per numera -->
+                    <input type="hidden" name="pol_vendor" value="<?= $keys->vendor ?>">
+                    <input type="hidden" name="pol_keyord" value="<?= $p->id ?>">
+                    <button id="continue" type="submit" class="btn btn-success center-block">Pay with credit card (<?= $p->getTotalCost() ?>€)</button>
+                </form>
+            <?php } ?>
         </div>
     </body>
 </html>

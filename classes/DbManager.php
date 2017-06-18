@@ -858,7 +858,7 @@ class DbManager {
     }
     
     public function setOtp($id, $otp){
-         $mysqli = $this->getConnection();
+        $mysqli = $this->getConnection();
         
         $query = "update participant set
                         otp = ?
@@ -874,6 +874,41 @@ class DbManager {
         $ok = $stmt->bind_param(
                 'si',
                 $otp,
+                $id);
+        if(!$ok) {goto error;}
+        
+        $ok = $stmt->execute();
+        if(!$ok) {goto error;}
+        
+        $ok = ($mysqli->affected_rows == 1);
+        $mysqli->close();
+        
+        return $ok;
+        
+        error: {
+            error_log("[DbManager] error on database access ");
+            $mysqli->close();
+            return false;
+        }
+    }
+    
+    public function finalisePayment($id){
+        $mysqli = $this->getConnection();
+        
+        $query = "update participant set
+                        state = 1,
+                        closed = curdate()
+                        where id = ?";
+        
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare($query);
+            
+        if (!$stmt) {
+            goto error;
+        }
+        
+        $ok = $stmt->bind_param(
+                'i',
                 $id);
         if(!$ok) {goto error;}
         
