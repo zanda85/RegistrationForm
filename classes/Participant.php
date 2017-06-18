@@ -45,8 +45,10 @@ class Participant {
     // state 1 = paid
     public $state = 0;
     
-    
     private $regtype;
+    
+    private $workshops = array();
+    private $extras = array();
     
     public function setRegType(RegType $regtype){
         $this->regtype = $regtype;
@@ -56,6 +58,39 @@ class Participant {
         return $this->regtype;
     }
 
+    public function hasWorkshop($id){
+        foreach ($this->workshops as $w){
+            if ($w->id == $id){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public function hasExtra($id){
+        foreach ($this->extras as $e){
+            if ($e->id == $id){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public function setWorkshops($workshops){
+        $this->workshops = $workshops;
+    }
+    
+    public function getWorkshops(){
+        return $this->workshops;
+    }
+    
+    public function setExtras($extras){
+        $this->extras = $extras;
+    }
+    
+    public function getExtras(){
+        return $this->extras;
+    }
     
    
 }

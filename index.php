@@ -55,11 +55,9 @@ class FrontController {
                 $p = DbManager::instance()->getParticipantById($partId);
                 if(FrontController::populateParticipant($p, $request)){
                     DbManager::instance()->updateParticipant($p);
-                    //TODO cambiare
-                    $keys->email = $p->email;
-                    $keys->regId = $p->regtype_id;
-                    $keys->participantId = $p->id;
-                    FrontController::loadPersonalStep($keys, $p);
+                    $workshops = DbManager::instance()->getWorkshopsByConfId($p->getRegType()->conference_id);
+                    $extras = DbManager::instance()->getExtraByConfId($p->getRegType()->conference_id);
+                    FrontController::loadWorkshopExtraStep($keys, $p, $workshops, $extras);
                 }else{
                     // something wrong, go to step 1
                     $keys->email = $p->email;
@@ -67,6 +65,18 @@ class FrontController {
                     $keys->participantId = $p->id;
                     FrontController::loadPersonalStep($keys, $p);
                 }
+                break;
+            
+            case 's3':
+                $partId = $request['partId'];
+                $p = new Participant();
+                $p->id = filter_var($partId, FILTER_VALIDATE_INT) ? $partId : -1;
+                $p = DbManager::instance()->getParticipantById($partId);
+                FrontController::addWorkshopExtra($p, $request);
+                $workshops = DbManager::instance()->getWorkshopsByConfId($p->getRegType()->conference_id);
+                $extras = DbManager::instance()->getExtraByConfId($p->getRegType()->conference_id);
+                DbManager::instance()->lazyLoadParticipant($p);
+                FrontController::loadWorkshopExtraStep($keys, $p, $workshops, $extras);
                 break;
             
             
@@ -91,6 +101,11 @@ class FrontController {
          $logo = $keys->logo;
          $nations = NationList::getMap();
          include 'views/personal.php';
+     }
+     
+     public static function loadWorkshopExtraStep($keys, $p, $workshops, $extras){
+         
+         include 'views/workshops.php';
      }
      
      public static function populateParticipant($p, &$request){
@@ -196,6 +211,26 @@ class FrontController {
         return $ok;
      }
      
+     public static function addWorkshopExtra($p, &$request){
+         DbManager::instance()->deleteExtras($p->id);
+         DbManager::instance()->deleteWorkshops($p->id);
+         
+         if(isset($request["w"])){
+            foreach($request["w"] as $w){
+                $wid = str_replace("w", "", $w);
+                DbManager::instance()->insertWorkshop($p->id, $wid);
+            }
+         }
+         
+         if(isset($request["e"])){
+            foreach($request["e"] as $e){
+                $eid = str_replace("e", "", $e);
+                DbManager::instance()->insertExtra($p->id, $eid);
+            }
+         }
+         
+         
+     }
      
      public static function write404() {
         // impostiamo il codice della risposta http a 404 (file not found)

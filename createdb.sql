@@ -115,6 +115,35 @@ ALTER TABLE `participant`
 ALTER TABLE participant ADD FOREIGN KEY participant_regtype_fk (regtype_id)
 REFERENCES regtype (id) ON UPDATE CASCADE;
 
+CREATE TABLE workshop_participant(
+    workshop_id int(11) NOT NULL,
+    participant_id int(11) NOT NULL
+);
+
+ALTER TABLE `workshop_participant`
+  ADD PRIMARY KEY (`workshop_id`, `participant_id`);
+
+ALTER TABLE workshop_participant ADD FOREIGN KEY wp_participant_fk (participant_id)
+REFERENCES participant (id) ON UPDATE CASCADE;
+
+ALTER TABLE workshop_participant ADD FOREIGN KEY wp_workshop_fk (workshop_id)
+REFERENCES workshop (id) ON UPDATE CASCADE;
+
+
+CREATE TABLE extra_participant(
+    extra_id int(11) NOT NULL,
+    participant_id int(11) NOT NULL
+);
+
+ALTER TABLE `extra_participant`
+  ADD PRIMARY KEY (`extra_id`, `participant_id`);
+
+ALTER TABLE extra_participant ADD FOREIGN KEY ep_participant_fk (participant_id)
+REFERENCES participant (id) ON UPDATE CASCADE;
+
+ALTER TABLE extra_participant ADD FOREIGN KEY ep_extra_fk (extra_id)
+REFERENCES extra (id) ON UPDATE CASCADE;
+
 
 insert into conferences (id, title, code, open) values
 (default, 'CHItaly 2017', 'chitaly2017', 1);
@@ -136,3 +165,11 @@ INSERT INTO `regType`(`id`, `conference_id`, `title`, `cost`, `has_workshop`, `a
 (default, 1, 'Main conference, Non-ACM Member, no workshops', 420.0, 1, 0),
 (default, 1, 'Main conference, student, no workshops', 260.0, 1, 0),
 (default, 1, 'Workshop only', 120.0, 1, 0);
+
+INSERT INTO `extra`(`id`, `conference_id`, `title`, `cost`) VALUES (default, 1,'Additional social dinner ticket', 60);
+
+INSERT INTO `workshop`(`id`, `conference_id`, `title`) VALUES 
+(default,1,'GHItaly17: 1st Workshop on Games-Human Interaction'), 
+(default,1,'Designing, Implementing and Evaluating Mid-Air Gestures and Speech-Based Interaction'), 
+(default,1,'ICS Materials: Unfolding Expressive-Sensorial and Aesthetic Qualities of Interactive, Connected, and Smart Materials'), 
+(default,1,'HCI and education in a changing world: from school to public engagement')

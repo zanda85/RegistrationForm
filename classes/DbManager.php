@@ -13,6 +13,9 @@
  */
 include_once 'classes/RegType.php';
 include_once 'classes/Participant.php';
+include_once 'classes/Workshop.php';
+include_once 'classes/Extra.php';
+
 
 class DbManager {
     public static $db_host = 'localhost';
@@ -455,6 +458,344 @@ class DbManager {
             error_log("[DbManager] error on database access ");
             $mysqli->close();
             return false;
+        }
+    }
+    
+    public function getWorkshopsByConfId($conf_id){
+       $mysqli = $this->getConnection();
+        $workshops = array();
+        
+        $query= "select workshop.id, 
+                        workshop.conference_id, 
+                        workshop.title
+                        from workshop
+                        where workshop.conference_id = ?";
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare($query);
+            
+        if (!$stmt) {
+            goto error;
+        }
+        
+        $conf_id = filter_var($conf_id, FILTER_VALIDATE_INT) ? $conf_id : 1;
+        $ok = $stmt->bind_param(
+                 'i',
+                 $conf_id);
+        if(!$ok) {goto error;}
+        
+        $ok = $stmt->execute();
+        if(!$ok) {goto error;}
+        
+        $w = new Workshop();
+        
+        $stmt->bind_result(
+                $w->id, 
+                $w->conference_id,
+                $w->title);
+        
+        while($stmt->fetch()){
+            $item = new Workshop();
+            $item->copy($w);
+            array_push($workshops, $item);
+        }
+        
+        $mysqli->close();
+        return $workshops;
+        
+        error: {
+            error_log("[DbManager] error on database access ");
+            $mysqli->close();
+            return $workshops;
+        }
+    }
+    
+    public function getExtraByConfId($conf_id){
+       $mysqli = $this->getConnection();
+        $extras = array();
+        
+        $query= "select extra.id, 
+                        extra.conference_id, 
+                        extra.title,
+                        extra.cost
+                        from extra
+                        where extra.conference_id = ?";
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare($query);
+            
+        if (!$stmt) {
+            goto error;
+        }
+        
+        $conf_id = filter_var($conf_id, FILTER_VALIDATE_INT) ? $conf_id : 1;
+        $ok = $stmt->bind_param(
+                 'i',
+                 $conf_id);
+        if(!$ok) {goto error;}
+        
+        $ok = $stmt->execute();
+        if(!$ok) {goto error;}
+        
+        $e = new Extra();
+        
+        $stmt->bind_result(
+                $e->id, 
+                $e->conference_id,
+                $e->title,
+                $e->cost);
+        
+        while($stmt->fetch()){
+            $item = new Extra();
+            $item->copy($e);
+            array_push($extras, $item);
+        }
+        
+        $mysqli->close();
+        return $extras;
+        
+        error: {
+            error_log("[DbManager] error on database access ");
+            $mysqli->close();
+            return $extras;
+        }
+    }
+    
+    public function insertWorkshop($p_id, $w_id){
+        $mysqli = $this->getConnection();
+        
+        $query = "insert into workshop_participant (workshop_id, participant_id) 
+                  values (?,?)";
+        $p_id = filter_var($p_id, FILTER_VALIDATE_INT) ? $p_id : -1;
+        $w_id = filter_var($w_id, FILTER_VALIDATE_INT) ? $w_id : -1;
+        
+        if($p_id == -1|| $w_id == -1){
+            goto error;
+        }
+        
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare($query);
+            
+        if (!$stmt) {
+            goto error;
+        }
+        
+        $ok = $stmt->bind_param(
+                 'ii',
+                 $w_id,
+                 $p_id);
+        if(!$ok) {goto error;}
+        
+        $ok = $stmt->execute();
+        if(!$ok) {goto error;}
+        
+        $mysqli->close();
+        return true;
+        
+        
+        error: {
+            error_log("[DbManager] error on database access ");
+            $mysqli->close();
+            return false;
+        }
+    }
+    
+    public function insertExtra($p_id, $e_id){
+        $mysqli = $this->getConnection();
+        
+        $query = "insert into extra_participant (extra_id, participant_id) 
+                  values (?,?)";
+        $p_id = filter_var($p_id, FILTER_VALIDATE_INT) ? $p_id : -1;
+        $e_id = filter_var($e_id, FILTER_VALIDATE_INT) ? $e_id : -1;
+        
+        if($p_id == -1|| $e_id == -1){
+            goto error;
+        }
+        
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare($query);
+            
+        if (!$stmt) {
+            goto error;
+        }
+        
+        $ok = $stmt->bind_param(
+                 'ii',
+                 $e_id,
+                 $p_id);
+        if(!$ok) {goto error;}
+        
+        $ok = $stmt->execute();
+        if(!$ok) {goto error;}
+        
+        $mysqli->close();
+        return true;
+        
+        
+        error: {
+            error_log("[DbManager] error on database access ");
+            $mysqli->close();
+            return false;
+        }
+    }
+    
+    public function deleteWorkshops($p_id){
+        $mysqli = $this->getConnection();
+        
+        $query = "delete from workshop_participant where participant_id = ?";
+        $p_id = filter_var($p_id, FILTER_VALIDATE_INT) ? $p_id : -1;
+        
+        if($p_id == -1){
+            goto error;
+        }
+        
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare($query);
+            
+        if (!$stmt) {
+            goto error;
+        }
+        
+        $ok = $stmt->bind_param(
+                 'i',
+                 $p_id);
+        if(!$ok) {goto error;}
+        
+        $ok = $stmt->execute();
+        if(!$ok) {goto error;}
+        
+        $mysqli->close();
+        return true;
+        
+        
+        error: {
+            error_log("[DbManager] error on database access ");
+            $mysqli->close();
+            return false;
+        }
+    }
+    
+    public function deleteExtras($p_id){
+        $mysqli = $this->getConnection();
+        
+        $query = "delete from extra_participant where participant_id = ?";
+        $p_id = filter_var($p_id, FILTER_VALIDATE_INT) ? $p_id : -1;
+        
+        if($p_id == -1){
+            goto error;
+        }
+        
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare($query);
+            
+        if (!$stmt) {
+            goto error;
+        }
+        
+        $ok = $stmt->bind_param(
+                 'i',
+                 $p_id);
+        if(!$ok) {goto error;}
+        
+        $ok = $stmt->execute();
+        if(!$ok) {goto error;}
+        
+        $mysqli->close();
+        return true;
+        
+        
+        error: {
+            error_log("[DbManager] error on database access ");
+            $mysqli->close();
+            return false;
+        }
+    }
+    
+    public function lazyLoadParticipant(Participant $p){
+        $mysqli = $this->getConnection();
+        $workshops = array();
+        
+        $query= "select workshop.id, 
+                        workshop.conference_id, 
+                        workshop.title
+                        from workshop_participant
+                        join workshop on workshop_participant.workshop_id = workshop.id
+                        where workshop_participant.participant_id = ?";
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare($query);
+            
+        if (!$stmt) {
+            goto error;
+        }
+        
+        $ok = $stmt->bind_param(
+                 'i',
+                 $p->id);
+        if(!$ok) {goto error;}
+        
+        $ok = $stmt->execute();
+        if(!$ok) {goto error;}
+        
+        $w = new Workshop();
+        
+        $stmt->bind_result(
+                $w->id, 
+                $w->conference_id,
+                $w->title);
+        
+        while($stmt->fetch()){
+            $item = new Workshop();
+            $item->copy($w);
+            array_push($workshops, $item);
+        }
+        
+        $p->setWorkshops($workshops);
+        
+        $extras = array();
+        $query= "select extra.id, 
+                        extra.conference_id, 
+                        extra.title,
+                        extra.cost
+                        from extra_participant
+                        join extra on extra_participant.extra_id = extra.id
+                        where extra_participant.participant_id = ?";
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare($query);
+            
+        if (!$stmt) {
+            goto error;
+        }
+
+        $ok = $stmt->bind_param(
+                 'i',
+                 $p->id);
+        if(!$ok) {goto error;}
+        
+        $ok = $stmt->execute();
+        if(!$ok) {goto error;}
+        
+        $e = new Extra();
+        
+        $stmt->bind_result(
+                $e->id, 
+                $e->conference_id,
+                $e->title,
+                $e->cost);
+        
+        while($stmt->fetch()){
+            $item = new Extra();
+            $item->copy($e);
+            array_push($extras, $item);
+        }
+        
+        $mysqli->close();
+        
+        $p->setExtras($extras);
+        
+        return; 
+        
+        error: {
+            error_log("[DbManager] error on database access ");
+            $mysqli->close();
+            return $workshops;
         }
     }
     
