@@ -76,7 +76,7 @@ class FrontController {
                 $workshops = DbManager::instance()->getWorkshopsByConfId($p->getRegType()->conference_id);
                 $extras = DbManager::instance()->getExtraByConfId($p->getRegType()->conference_id);
                 DbManager::instance()->lazyLoadParticipant($p);
-                FrontController::loadWorkshopExtraStep($keys, $p, $workshops, $extras);
+                FrontController::loadSummary($keys, $p);
                 break;
             
             
@@ -106,6 +106,10 @@ class FrontController {
      public static function loadWorkshopExtraStep($keys, $p, $workshops, $extras){
          
          include 'views/workshops.php';
+     }
+     
+     public static function loadSummary($keys, $p){
+         include 'views/summary.php';
      }
      
      public static function populateParticipant($p, &$request){

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Registration - personal information</title>
+        <title>Registration - workshops and extras </title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <script src="js/jquery-3.2.1.min.js"></script>
@@ -69,3 +69,4 @@
         </div>
     </body>
 </html>
+

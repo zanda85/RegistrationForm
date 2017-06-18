@@ -92,5 +92,40 @@ class Participant {
         return $this->extras;
     }
     
-   
+    public function getTotalCost(){
+        $cost = 0;
+        foreach ($this->extras as $e){
+            $cost += $e->cost;
+        }
+        
+        $cost += $this->getRegType()->cost;
+        
+        return $cost;
+    }
+    
+    public function getDietaryString(){
+        $s = '';
+        $s .= $this->meatfree == 1 ? 'Meat free diet, ' : '';
+        $s .= $this->fishfree == 1 ? 'Fish free diet, ' : '';
+        $s .= $this->shellfishfree == 1 ? 'Shellfish free diet, ' : '';
+        $s .= $this->eggfree == 1 ? 'Egg free diet, ' : '';
+        $s .= $this->milkfree == 1 ? 'Milt/Lactose free diet, ' : '';
+        $s .= $this->animalfree == 1 ? 'Diet free of animal derived products, ' : '';
+        $s .= $this->glutenfree == 1 ? 'Gluten free diet, ' : '';
+        $s .= $this->peanutfree == 1 ? 'Peanut free diet, ' : '';
+        $s .= $this->wheatfree == 1 ? 'Wheat free diet, ' : '';
+        $s .= $this->soyfree == 1 ? 'Soy free diet, ' : '';
+        $s .= $this->additionaldiet;
+        
+        if(strlen($s) > 0 && strlen($this->additionaldiet) == 0){
+            $s = substr($s, 0, -1);
+        }
+        
+        if(strlen($s) == 0){
+            $s = 'None';
+        }
+        
+        return $s;
+        
+    }
 }

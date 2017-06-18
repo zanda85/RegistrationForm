@@ -15,3 +15,8 @@ and open the template in the editor.
 .left-align{
     text-align: left !important;
 }
+
+.total strong{
+    font-size: 1.2em;
+    
+}
