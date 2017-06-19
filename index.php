@@ -290,7 +290,6 @@ class Keys {
     public $participantId;
     // test
     public $numeraUrl = 'https://testnpgw.numera.it/npgw3/www/numgwp1.asp';
-
     // produzione
     // public $numeraUrl = 'https://npgw.numera.it/npgw3/www/numgwp1.asp';
 }
