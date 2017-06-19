@@ -5,10 +5,16 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <script src="js/jquery-3.2.1.min.js"></script>
+        <script src="js/bootstrap.min.js" ></script>
+        <script src="js/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="css/custom.css" >
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/bootstrap-theme.min.css" >
-        <link rel="stylesheet" href="css/custom.css" >
-        <script src="js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="css/jquery-ui.min.css" >
+        <link rel="stylesheet" href="css/jquery-ui.structure.min.css" >
+        <link rel="stylesheet" href="css/jquery-ui.theme.min.css" >
+        
+        
         
         <script src="js/personal.js"></script>
     </head>
@@ -45,9 +51,9 @@
                           foreach ($extras as $e) {
                         ?>
                         <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="e<?=$e->id?>" name="e[]"
-                                    <?= $p->hasExtra($e->id) ? "checked='checked'" : "" ?>>
+                            <input id ="e<?= $e->id ?>" value="<?=$p->getExtraCount($e->id)?>" 
+                                   class="spinner" name="e<?= $e->id ?>" min="0">
+                            <label for="e<?= $e->id ?>">
                                 <?= $e->title ?> ( + <?= $e->cost ?>€)
                             </label>
                         </div>

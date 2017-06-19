@@ -97,7 +97,7 @@ class Participant {
     public function getTotalCost(){
         $cost = 0;
         foreach ($this->extras as $e){
-            $cost += $e->cost;
+            $cost += $e->cost * $e->count;
         }
         
         $cost += $this->getRegType()->cost;
@@ -120,7 +120,7 @@ class Participant {
         $s .= $this->additionaldiet;
         
         if(strlen($s) > 0 && strlen($this->additionaldiet) == 0){
-            $s = substr($s, 0, -1);
+            $s = substr($s, 0, -2);
         }
         
         if(strlen($s) == 0){
@@ -129,5 +129,14 @@ class Participant {
         
         return $s;
         
+    }
+    
+    public function getExtraCount($id){
+        foreach($this->extras as $e){
+            if($e->id == $id){
+                return $e->count;
+            }
+        }
+        return 0;
     }
 }

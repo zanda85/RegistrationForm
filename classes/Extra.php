@@ -16,11 +16,13 @@ class Extra {
     public $conf_id;
     public $title;
     public $cost;
+    public $count;
     
     public function copy(Extra $e){
         $this->id = $e->id;
         $this->conf_id = $e->conf_id;
         $this->title = $e->title;
         $this->cost =$e->cost;
+        $this->count = $e->count;
     }
 }

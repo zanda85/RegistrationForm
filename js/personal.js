@@ -30,4 +30,6 @@ $(function() {
        }
        $('#continue').prop('disabled', disableSubmit());
    });
+   
+   $(".spinner").spinner().width(50);
 });

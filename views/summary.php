@@ -48,7 +48,7 @@
                             <li><?= $w->title ?> </li>
                         <?php } ?>
                         <?php foreach ($p->getExtras() as $e) { ?>
-                            <li><?= $e->title ?> (<?= $e->cost ?> €)</li>
+                            <li><?= ($e->count > 1 ? $e->count : '') ?> <?= $e->title ?> ( <?= $e->count ?> x <?= $e->cost ?>€)</li>
                         <?php } ?>
                     </ul>
                     <strong style="font-size:2.0em">Total: <?= $p->getTotalCost() ?>€ </strong>

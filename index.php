@@ -130,10 +130,10 @@ class FrontController {
 
     public static function loadSummary(&$request, $p, $numera) {
         $p = DbManager::instance()->getParticipantById($p->id);
-        FrontController::addWorkshopExtra($p, $request);
-        DbManager::instance()->lazyLoadParticipant($p);
         $workshops = DbManager::instance()->getWorkshopsByConfId($p->getRegType()->conference_id);
         $extras = DbManager::instance()->getExtraByConfId($p->getRegType()->conference_id);
+        FrontController::addWorkshopExtra($p, $request, $extras);
+        DbManager::instance()->lazyLoadParticipant($p);
         $conf = DbManager::instance()->getConferenceById($p->getRegType()->conference_id);
         $request['conf'] = $conf->code;
         $keys = FrontController::populateKeys($request);
@@ -253,7 +253,7 @@ class FrontController {
         return $ok;
     }
 
-    public static function addWorkshopExtra($p, &$request) {
+    public static function addWorkshopExtra($p, &$request, &$extras) {
         if (isset($request["w"])) {
             DbManager::instance()->deleteWorkshops($p->id);
             foreach ($request["w"] as $w) {
@@ -262,13 +262,17 @@ class FrontController {
             }
         }
 
-        if (isset($request["e"])) {
-            DbManager::instance()->deleteExtras($p->id);
-            foreach ($request["e"] as $e) {
-                $eid = str_replace("e", "", $e);
-                DbManager::instance()->insertExtra($p->id, $eid);
+        DbManager::instance()->deleteExtras($p->id);
+        foreach ($extras as $extra){
+            $rk = "e".$extra->id;
+            if (isset($request[$rk])) {
+                $val = filter_var($request[$rk], FILTER_VALIDATE_INT) ? $request[$rk] : 0;
+                if($val > 0){
+                    DbManager::instance()->insertExtra($p->id, $extra->id, $val);
+                }
             }
         }
+        
     }
 
     public static function write404() {

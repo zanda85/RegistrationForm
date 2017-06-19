@@ -606,15 +606,16 @@ class DbManager {
         }
     }
     
-    public function insertExtra($p_id, $e_id){
+    public function insertExtra($p_id, $e_id, $val){
         $mysqli = $this->getConnection();
         
-        $query = "insert into extra_participant (extra_id, participant_id) 
-                  values (?,?)";
+        $query = "insert into extra_participant (extra_id, participant_id, count) 
+                  values (?,?,?)";
         $p_id = filter_var($p_id, FILTER_VALIDATE_INT) ? $p_id : -1;
         $e_id = filter_var($e_id, FILTER_VALIDATE_INT) ? $e_id : -1;
+        $val = filter_var($val, FILTER_VALIDATE_INT) ? $val : -1;
         
-        if($p_id == -1|| $e_id == -1){
+        if($p_id == -1|| $e_id == -1 || $val == -1){
             goto error;
         }
         
@@ -626,9 +627,10 @@ class DbManager {
         }
         
         $ok = $stmt->bind_param(
-                 'ii',
+                 'iii',
                  $e_id,
-                 $p_id);
+                 $p_id,
+                 $val);
         if(!$ok) {goto error;}
         
         $ok = $stmt->execute();
@@ -761,7 +763,8 @@ class DbManager {
         $query= "select extra.id, 
                         extra.conference_id, 
                         extra.title,
-                        extra.cost
+                        extra.cost,
+                        extra_participant.count
                         from extra_participant
                         join extra on extra_participant.extra_id = extra.id
                         where extra_participant.participant_id = ?";
@@ -786,7 +789,8 @@ class DbManager {
                 $e->id, 
                 $e->conference_id,
                 $e->title,
-                $e->cost);
+                $e->cost,
+                $e->count);
         
         while($stmt->fetch()){
             $item = new Extra();
