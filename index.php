@@ -13,7 +13,7 @@ class FrontController {
 
         //TODO inserire un blocco per connessioni non https
 
-        session_start();
+        header('Content-type: text/html; charset=utf-8');
         
         
         if (isset($request['keyord'])) {

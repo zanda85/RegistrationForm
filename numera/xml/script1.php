@@ -2,7 +2,7 @@
 <npgw3_script1>
     <coderr><?=$code ?></coderr> 
     <termid><?= $conf->vendor ?></termid> 
-    <importo><?= number_format($p->getTotalCost(), 2) ?></importo> 
+    <importo><?= number_format($p->getTotalCost(), 2, ',') ?></importo> 
     <causale>
         <cod><?= $conf->id.$p->getRegType()->id ?></cod> 
         <riga><?= $p->getRegType()->title ?></riga> 
