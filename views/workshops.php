@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Registration - workshops and extras </title>
-        <meta charset="UTF-8">
+        <meta charset="ISO-8859-1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <script src="js/jquery-3.2.1.min.js"></script>
         <script src="js/bootstrap.min.js" ></script>
@@ -54,7 +54,7 @@
                             <input id ="e<?= $e->id ?>" value="<?=$p->getExtraCount($e->id)?>" 
                                    class="spinner" name="e<?= $e->id ?>" min="0">
                             <label for="e<?= $e->id ?>">
-                                <?= $e->title ?> ( + <?= $e->cost ?>€)
+                                <?= $e->title ?> ( + <?= $e->cost ?>&euro;)
                             </label>
                         </div>
                         

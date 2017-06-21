@@ -17,4 +17,6 @@ class Conference {
     public $code;
     public $vendor;
     public $open;
+    public $terminal;
+    public $numeraurl;
 }

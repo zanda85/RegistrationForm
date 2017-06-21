@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Registration - summary </title>
-        <meta charset="UTF-8">
+        <meta charset="ISO-8859-1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <script src="js/jquery-3.2.1.min.js"></script>
         <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -43,15 +43,15 @@
 
                     <h3>Fees</h3>
                     <ul>
-                        <li><?= $p->getRegType()->title ?> (<?= $p->getRegType()->cost ?> €)</li>
+                        <li><?= $p->getRegType()->title ?> (<?= $p->getRegType()->cost ?> &euro;)</li>
                         <?php foreach ($p->getWorkshops() as $w) { ?>
                             <li><?= $w->title ?> </li>
                         <?php } ?>
                         <?php foreach ($p->getExtras() as $e) { ?>
-                            <li><?= ($e->count > 1 ? $e->count : '') ?> <?= $e->title ?> ( <?= $e->count ?> x <?= $e->cost ?>€)</li>
+                            <li><?= ($e->count > 1 ? $e->count : '') ?> <?= $e->title ?> ( <?= $e->count ?> x <?= $e->cost ?>&euro;)</li>
                         <?php } ?>
                     </ul>
-                    <strong style="font-size:2.0em">Total: <?= $p->getTotalCost() ?>€ </strong>
+                    <strong style="font-size:2.0em">Total: <?= $p->getTotalCost() ?>&euro; </strong>
 
 
 
@@ -68,7 +68,7 @@
                     <!-- input per numera -->
                     <input type="hidden" name="pol_vendor" value="<?= $keys->vendor ?>">
                     <input type="hidden" name="pol_keyord" value="<?= $p->id ?>">
-                    <button id="continue" type="submit" class="btn btn-success center-block">Pay with credit card (<?= $p->getTotalCost() ?>€)</button>
+                    <button id="continue" type="submit" class="btn btn-success center-block">Pay with credit card (<?= $p->getTotalCost() ?>&euro;)</button>
                 </form>
             <?php } ?>
         </div>

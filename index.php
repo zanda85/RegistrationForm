@@ -13,7 +13,7 @@ class FrontController {
 
         //TODO inserire un blocco per connessioni non https
 
-        header('Content-type: text/html; charset=utf-8');
+        header('Content-type: text/html; charset=ISO-8859-1');
         
         
         if (isset($request['keyord'])) {
@@ -99,15 +99,18 @@ class FrontController {
 
     public static function populateKeys( &$request){
         $keys = new Keys();
-        switch ($request['conf']) {
-            case 'chitaly2017':
-                $keys->logo = "chitaly2017/logo.png";
-                $keys->conf = 'chitaly2017';
+        
+        if(isset($request['conf'])){
+            $c = DbManager::instance()->getConferenceByCode($request['conf']);
+            if($c != null){
+                $keys->logo = "events/$c->code/logo.png";
+                $keys->conf = $c->code;
+                $keys->numeraUrl = $c->numeraurl;
+                $keys->vendor = $c->vendor;
                 return $keys;
-
-            default:
-                
+            }else{
                 return null;
+            }
         }
     }
     
@@ -292,10 +295,7 @@ class Keys {
     public $email;
     public $regId;
     public $participantId;
-    // test
-    public $numeraUrl = 'https://testnpgw.numera.it/npgw3/www/numgwp1.asp';
-    // produzione
-    // public $numeraUrl = 'https://npgw.numera.it/npgw3/www/numgwp1.asp';
+    public $vendor;
 }
 
 ?>

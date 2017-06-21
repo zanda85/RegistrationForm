@@ -811,15 +811,69 @@ class DbManager {
         }
     }
     
-    public function getConferenceById($conf_id){
+    public function getConferenceByCode($code){
         $mysqli = $this->getConnection();
-        $extras = array();
         
         $query= "select conference.id, 
                         conference.title, 
                         conference.code,
                         conference.vendor,
-                        conference.open
+                        conference.open,
+                        conference.terminal,
+                        conference.numeraurl
+                        from conference
+                        where conference.code = ?";
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare($query);
+            
+        if (!$stmt) {
+            goto error;
+        }
+        
+       
+        $ok = $stmt->bind_param(
+                 's',
+                 $code);
+        if(!$ok) {goto error;}
+        
+        $ok = $stmt->execute();
+        if(!$ok) {goto error;}
+        
+        $c = new Conference();
+        
+        $stmt->bind_result(
+                $c->id, 
+                $c->title,
+                $c->code,
+                $c->vendor,
+                $c->open,
+                $c->terminal,
+                $c->numeraurl);
+        
+        if (!$stmt->fetch()){
+            goto error;
+        }
+        
+        $mysqli->close();
+        return $c;
+        
+        error: {
+            error_log("[DbManager] error on database access ");
+            $mysqli->close();
+            return null;
+        }
+    }
+    
+    public function getConferenceById($conf_id){
+        $mysqli = $this->getConnection();
+        
+        $query= "select conference.id, 
+                        conference.title, 
+                        conference.code,
+                        conference.vendor,
+                        conference.open,
+                        conference.terminal,
+                        conference.numeraurl
                         from conference
                         where conference.id = ?";
         $stmt = $mysqli->stmt_init();
@@ -845,7 +899,9 @@ class DbManager {
                 $c->title,
                 $c->code,
                 $c->vendor,
-                $c->open);
+                $c->open,
+                $c->terminal,
+                $c->numeraurl);
         
         if (!$stmt->fetch()){
             goto error;
@@ -857,7 +913,7 @@ class DbManager {
         error: {
             error_log("[DbManager] error on database access ");
             $mysqli->close();
-            return $extras;
+            return null;
         }
     }
     

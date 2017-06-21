@@ -7,7 +7,7 @@ and open the template in the editor.
 <html>
     <head>
         <title>Registration - personal information</title>
-        <meta charset="UTF-8">
+        <meta charset="ISO-8859-1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <script src="js/jquery-3.2.1.min.js"></script>
         <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -33,7 +33,7 @@ and open the template in the editor.
                     <div class="form-group">
                         <label  class="col-sm-2 control-label" >Registration</label>
                         <div class="col-sm-10">
-                            <span style="text-align: left" class="left-align col-sm-10 control-label "><?= $p->getRegType()->title ?> (<?= $p->getRegType()->cost ?>€)</span>
+                            <span style="text-align: left" class="left-align col-sm-10 control-label "><?= $p->getRegType()->title ?> (<?= $p->getRegType()->cost ?>&euro;)</span>
                         </div>
                     </div>
                     <div class="form-group">

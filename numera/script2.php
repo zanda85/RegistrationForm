@@ -11,7 +11,7 @@ Script2::dispatch($_REQUEST);
 class Script2 {
     
      public static function dispatch(&$request) {
-         if(isset($request['keyord'])){
+         if(isset($request['keyord']) && Script2::iptest()){
              $p = DbManager::instance()->getParticipantById($request['keyord']);
              if($p == null){
                  $code = 1;
@@ -26,5 +26,11 @@ class Script2 {
          header('Content-Type: text/xml');
         include 'xml/script2.php';
      }
+     
+    public static function iptest(){
+        return $_SERVER['REMOTE_ADDR'] == '81.119.165.131' ||
+                 $_SERVER['REMOTE_ADDR'] == '81.113.175.233'||
+                 $_SERVER['REMOTE_ADDR'] == '127.0.0.1';
+    }
      
 }

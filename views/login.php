@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Registration - start registration</title>
-        <meta charset="UTF-8">
+        <meta charset="ISO-8859-1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <script src="js/jquery-3.2.1.min.js"></script>
         <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -39,7 +39,7 @@
                             <select id="regtype"  class="form-control" name="regtype" data-required="true">
                                 <option value=""></option>
                                 <?php foreach ($regs as $reg){ ?>
-                                <option value="reg<?= $reg->id ?>"><?= $reg->title ?> (<?= $reg->cost ?>€)</option>
+                                <option value="reg<?= $reg->id ?>"><?= $reg->title ?> (<?= $reg->cost ?>&euro;)</option>
                                 <?php } ?>
                             </select>
                             <span id="country-error" class="has-error help-block hidden">This field is required</span>
