@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Creato il: Giu 19, 2017 alle 17:57
+-- Creato il: Giu 21, 2017 alle 15:35
 -- Versione del server: 5.6.35
 -- Versione PHP: 7.1.1
 
@@ -63,17 +63,16 @@ INSERT INTO `extra` (`id`, `conference_id`, `title`, `cost`) VALUES
 
 CREATE TABLE `extra_participant` (
   `extra_id` int(11) NOT NULL,
-  `participant_id` int(11) NOT NULL
+  `participant_id` int(11) NOT NULL,
+  `count` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Dump dei dati per la tabella `extra_participant`
 --
 
-INSERT INTO `extra_participant` (`extra_id`, `participant_id`) VALUES
-(1, 7),
-(1, 9),
-(1, 10);
+INSERT INTO `extra_participant` (`extra_id`, `participant_id`, `count`) VALUES
+(1, 9, 3);
 
 -- --------------------------------------------------------
 
@@ -125,41 +124,6 @@ INSERT INTO `participant` (`id`, `regtype_id`, `email`, `prefix`, `firstname`, `
 (8, 2, 'spano.davide@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '', '0000-00-00', ''),
 (9, 1, 'davide.spano@unica.it', 'Prof.', 'Davide', '', 'Spano', '', 'Davide spano', 'University of Cagliari', 'IT', 'Via Ospedale 72', '', 'Cagliari', '09124', '', '122344', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 0, '::1', NULL, NULL),
 (10, 2, 'davide.spano@unica.it', '', 'Davide', '', 'Spano', '', 'Davide Spano', 'University of Cagliari', 'IT', 'Via Ospedale 72', '', 'Cagliari', '09124', '', '', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '', 0, '::1', NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Struttura della tabella `regType`
---
-
-CREATE TABLE `regType` (
-  `id` int(11) NOT NULL,
-  `conference_id` int(11) DEFAULT NULL,
-  `title` varchar(128) COLLATE utf8_bin DEFAULT NULL,
-  `cost` float DEFAULT NULL,
-  `has_workshop` int(11) DEFAULT NULL,
-  `available` smallint(6) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dump dei dati per la tabella `regType`
---
-
-INSERT INTO `regType` (`id`, `conference_id`, `title`, `cost`, `has_workshop`, `available`) VALUES
-(1, 1, 'Main conference (early), ACM Member, with workshops', 340, 1, 1),
-(2, 1, 'Main conference (early), Non-ACM Member, with workshops', 400, 1, 1),
-(3, 1, 'Main conference (early), student, with workshops', 270, 1, 1),
-(4, 1, 'Main conference (early), ACM Member, no workshops', 300, 1, 1),
-(5, 1, 'Main conference (early), Non-ACM Member, no workshops', 360, 1, 1),
-(6, 1, 'Main conference (early), student, no workshops', 230, 1, 1),
-(7, 1, 'Workshop only (early)', 110, 1, 1),
-(8, 1, 'Main conference, ACM Member, with workshops', 410, 1, 0),
-(9, 1, 'Main conference, Non-ACM Member, with workshops', 470, 1, 0),
-(10, 1, 'Main conference, student, with workshops', 310, 1, 0),
-(11, 1, 'Main conference, ACM Member, no workshops', 360, 1, 0),
-(12, 1, 'Main conference, Non-ACM Member, no workshops', 420, 1, 0),
-(13, 1, 'Main conference, student, no workshops', 260, 1, 0),
-(14, 1, 'Workshop only', 120, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -236,13 +200,6 @@ ALTER TABLE `participant`
   ADD KEY `participant_regtype_fk` (`regtype_id`);
 
 --
--- Indici per le tabelle `regType`
---
-ALTER TABLE `regType`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `conference_fk` (`conference_id`);
-
---
 -- Indici per le tabelle `workshop`
 --
 ALTER TABLE `workshop`
@@ -276,11 +233,6 @@ ALTER TABLE `extra`
 ALTER TABLE `participant`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
--- AUTO_INCREMENT per la tabella `regType`
---
-ALTER TABLE `regType`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
---
 -- AUTO_INCREMENT per la tabella `workshop`
 --
 ALTER TABLE `workshop`
@@ -307,12 +259,6 @@ ALTER TABLE `extra_participant`
 --
 ALTER TABLE `participant`
   ADD CONSTRAINT `participant_ibfk_1` FOREIGN KEY (`regtype_id`) REFERENCES `regtype` (`id`) ON UPDATE CASCADE;
-
---
--- Limiti per la tabella `regType`
---
-ALTER TABLE `regType`
-  ADD CONSTRAINT `regtype_ibfk_1` FOREIGN KEY (`conference_id`) REFERENCES `conference` (`id`) ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `workshop`
