@@ -135,7 +135,11 @@ class FrontController {
         $p = DbManager::instance()->getParticipantById($p->id);
         $workshops = DbManager::instance()->getWorkshopsByConfId($p->getRegType()->conference_id);
         $extras = DbManager::instance()->getExtraByConfId($p->getRegType()->conference_id);
-        FrontController::addWorkshopExtra($p, $request, $extras);
+        if($request['step'] == 's3' && $p->state != 1){
+            // aggiungo workshop ed extra solo se sono al passo 3 e l'ordine 
+            // non e' chiuso
+            FrontController::addWorkshopExtra($p, $request, $extras);
+        }
         DbManager::instance()->lazyLoadParticipant($p);
         $conf = DbManager::instance()->getConferenceById($p->getRegType()->conference_id);
         $request['conf'] = $conf->code;
