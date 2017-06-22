@@ -61,10 +61,7 @@
 
 
                 <?php if ($state == "nok" || $state == "pay") { ?>  
-                    <!-- TODO eliminare prima di inviare a numera -->
-                    <input type="hidden" name="step" value="s4">
-                    <input type="hidden" name="conf" value="<?= $keys->conf ?>">
-                    <input type="hidden" name="partId" value="<?= $p->id ?>">
+                    
                     <!-- input per numera -->
                     <input type="hidden" name="pol_vendor" value="<?= $keys->vendor ?>">
                     <input type="hidden" name="pol_keyord" value="<?= $p->id ?>">
