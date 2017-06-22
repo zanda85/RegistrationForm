@@ -20,12 +20,14 @@ class Script1 {
                  $code = 0; 
                  error_log("[script 1] request ok");
              }else{
+                 $p = new Participant();
                  $code = 1;
                  error_log("[script 1] request not ok");
              }
              
              
          }else{
+             $p = new Participant();
              $code = 1;
          }
          header('Content-Type: text/xml');
