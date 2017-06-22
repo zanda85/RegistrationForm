@@ -16,6 +16,7 @@ class Script1 {
              $p = DbManager::instance()->getParticipantById($request['keyord']);
              DbManager::instance()->lazyLoadParticipant($p);
              $conf = DbManager::instance()->getConferenceById($p->getRegType()->conference_id);
+             error_log("[script 1] set otp  ".$request['otp']. " keyord ".$request['keyord']);
              if(DbManager::instance()->setOtp($p->id, $request['otp'])){
                  $code = 0; 
                  error_log("[script 1] request ok");
