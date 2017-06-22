@@ -16,7 +16,7 @@
         <div class="container">
 
             <?php if ($state == "nok" || $state == "pay") { ?>
-                <form class="form-horizontal" method="post" action="<?= $keys->numeraUrl ?>">
+                <form name="form_carta" class="form-horizontal" method="post" action="<?= $keys->numeraUrl ?>">
                 <?php } ?>
                 <img src="<?= $keys->logo ?>" alt="conference logo" class="img-fluid" style="width: 100%"/>
 
