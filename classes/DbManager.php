@@ -940,10 +940,10 @@ class DbManager {
         $ok = $stmt->execute();
         if(!$ok) {goto error;}
         
-        $ok = ($mysqli->affected_rows == 1);
+        
         $mysqli->close();
         
-        return $ok;
+        return true;
         
         error: {
             error_log("[DbManager] error on database access ");
@@ -975,7 +975,7 @@ class DbManager {
         $ok = $stmt->execute();
         if(!$ok) {goto error;}
         
-        
+        $ok = ($mysqli->affected_rows == 1);
         $mysqli->close();
         
         return $ok;
