@@ -35,12 +35,12 @@
                 <h2>Registration summary</h2>
                 <div class="well">
                     <h3>Personal Information</h3>
-                    <?php if($p->invoice_type == 0){ ?>
+                    <?php if($p->invoiceType == 0){ ?>
                     <?= $p->prefix ?> <?= $p->firstname ?> <?= $p->middlename ?> <?= $p->lastname ?> <br/>
                     <?= $p->company ?> <br/>
                     <?= $p->addressline1 ?> <?= $p->addressline2 ?>, <?= $p->zip ?>, <?= $p->city ?>, <?= $p->country ?><br/>
                     <?php } ?>
-                    <?php if($p->invoice_type == 1){ ?>
+                    <?php if($p->invoiceType == 1){ ?>
                     <?= $p->prefix ?> <?= $p->firstname ?> <?= $p->middlename ?> <?= $p->lastname ?> 
                     <h3>Billing Information</h3>
                     <?= $p->company ?> <br/>
