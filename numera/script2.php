@@ -11,15 +11,15 @@ Script2::dispatch($_REQUEST);
 class Script2 {
     
      public static function dispatch(&$request) {
-         error_log("[script 2] received request from  ".$_SERVER['REMOTE_ADDR']);
+         //error_log("[script 2] received request from  ".$_SERVER['REMOTE_ADDR']);
          if(isset($request['keyord']) && Script2::iptest()){
              $p = DbManager::instance()->getParticipantById($request['keyord']);
              if($p == null){
                  $code = 1;
-                 error_log("[script 2] request ok");
+                 //error_log("[script 2] request ok");
              }else{
                  $code = 0;
-                 error_log("[script 1] request not ok");
+                 //error_log("[script 1] request not ok");
              }
              
              

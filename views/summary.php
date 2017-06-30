@@ -22,13 +22,14 @@
 
 
                 <?php if ($state == "nok") { ?>
-                <div class="alert alert-warning" style="margin-top:10px">
+                    <div class="alert alert-warning" style="margin-top:10px">
                         <strong>Warning!</strong> The registration payment did not complete successfully.  
                     </div>
                 <?php } ?>
                 <?php if ($state == "ok") { ?>
-                <div class="alert alert-success" style="margin-top:10px">
-                        <strong>Success!</strong> The registration is completed.  
+                    <div class="alert alert-success" style="margin-top:10px">
+                        <strong>Success!</strong> The registration is completed.  <br/>
+                        We will send you a proper receipt or invoce by email as soon as possible.  
                     </div>
                 <?php } ?>
                 <h2>Registration summary</h2>
@@ -61,7 +62,7 @@
 
 
                 <?php if ($state == "nok" || $state == "pay") { ?>  
-                    
+
                     <!-- input per numera -->
                     <input type="hidden" name="pol_vendor" value="<?= $keys->vendor ?>">
                     <input type="hidden" name="pol_keyord" value="<?= $p->id ?>">

@@ -28,7 +28,8 @@ class Participant {
     public $city;
     public $zip;
     public $taxid;
-    public $acm;
+    public $membershipId;
+    public $membershipName;
     public $meatfree = 0;
     public $fishfree = 0;
     public $shellfishfree = 0;
@@ -42,6 +43,8 @@ class Participant {
     public $additionaldiet;
     public $ipaddress;
     public $otp;
+    public $cf;
+    public $idNumber;
     
     // state 0 = not paid
     // state 1 = paid

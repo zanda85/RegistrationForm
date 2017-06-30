@@ -113,6 +113,28 @@ and open the template in the editor.
                             <span id="country-error" class="has-error help-block hidden">This field is required</span>
                         </div>
                     </div>
+                    
+                     <div class="form-group">
+                        <label for="cf" class="col-sm-2 control-label">CF *</label>
+                        <div class="col-sm-10">
+                            <input type="text"  class="form-control" id="cf" name="cf" 
+                                   value="<?= $p->cf ?>"
+                                   placeholder="the italian 'Codice Fiscale'" data-required="true">
+                            <span id="cf-error" class="has-error help-block hidden">This field is required</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="idNumber" class="col-sm-2 control-label">ID Number *</label>
+                        <div class="col-sm-10">
+                            <input type="text"  class="form-control" id="idNumber" name="idNumber" 
+                                   value="<?= $p->idNumber ?>"
+                                   placeholder="A valid ID or Passport number" data-required="true">
+                            <span id="idNumber-error" class="has-error help-block hidden">This field is required</span>
+                        </div>
+                    </div>
+                    
+                    
                     <div class="form-group">
                         <label for="address1" class="col-sm-2 control-label">Address Line 1 *</label>
                         <div class="col-sm-10">
@@ -148,6 +170,8 @@ and open the template in the editor.
                             <span id="zip-error" class="has-error help-block hidden">This field is required</span>
                         </div>
                     </div>
+                    
+                    <?php if(false){ ?>
                     <div class="form-group">
                         <label for="taxNumber" class="col-sm-2 control-label">Tax identification Number</label>
                         <div class="col-sm-10">
@@ -156,14 +180,26 @@ and open the template in the editor.
                                    name="taxNumber" placeholder="">
                         </div>
                     </div>
+                    <?php } ?>
+                    
+                    <?php if($p->getRegType()->hasMembership == 1){ ?>
                     <div class="form-group">
-                        <label for="acm" class="col-sm-2 control-label">ACM Membership Number</label>
+                        <label for="membershipName" class="col-sm-2 control-label">Member of * </label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="acm" 
-                                   value="<?= $p->acm ?>"
-                                   name="acm" placeholder="">
+                            <input type="text" class="form-control" id="membershipName" 
+                                   value="<?= $p->membershipName ?>"
+                                   name="membershipName" placeholder="the name of the organization eligible for the discounted fee" data-required="true"> 
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="membershipId" class="col-sm-2 control-label">Membership Number *</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="membershipId" 
+                                   value="<?= $p->membershipId ?>"
+                                   name="membershipId" placeholder="your organization membership number" data-required="true">
+                        </div>
+                    </div>
+                    <?php } ?>
                 </div>
 
                 <h2>Dietary Restrictions</h2>

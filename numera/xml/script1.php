@@ -4,8 +4,8 @@
     <termid><?= $conf->terminal ?></termid> 
     <importo><?= number_format($p->getTotalCost(), 2, ',', '.') ?></importo> 
     <causale>
-        <cod><?= "C$conf->id-P".$p->getRegType()->id ?></cod> 
-        <riga><?= $p->getRegType()->title ?></riga> 
+        <cod><?= $conf->code."-reg-".$p->id ?></cod> 
+        <riga><?= $p->lastname." ".$p->firstname." ".$p->middlename ?></riga> 
     </causale>
     <email><?= $p->email ?></email> 
     <language>EN</language> 

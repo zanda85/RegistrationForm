@@ -9,15 +9,20 @@
         <link rel="stylesheet" href="css/bootstrap-theme.min.css" >
         <link rel="stylesheet" href="css/custom.css" >
         <script src="js/bootstrap.min.js"></script>
-        
+
         <script src="js/personal.js"></script>
     </head>
     <body>
         <div class="container">
-            
+
             <form class="form-horizontal" method="post" action="index.php">
                 <img src="<?= $keys->logo ?>" alt="conference logo" class="img-fluid" style="width: 100%"/>
                 <h2>Start your registration</h2>
+                <div class="alert alert-info alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    Please insert your email address and select the registration type for starting or continuing the registration process. <br/>
+                    If you already completed the registration, you will be redirected to the fees summary. <br/>
+                </div>
                 <div class="well">
                     <div class="form-group">
                         <label for="email1" class="col-sm-2 control-label" >Email *</label>
@@ -38,8 +43,8 @@
                         <div class="col-sm-10">
                             <select id="regtype"  class="form-control" name="regtype" data-required="true">
                                 <option value=""></option>
-                                <?php foreach ($regs as $reg){ ?>
-                                <option value="reg<?= $reg->id ?>"><?= $reg->title ?> (<?= $reg->cost ?>&euro;)</option>
+                                <?php foreach ($regs as $reg) { ?>
+                                    <option value="reg<?= $reg->id ?>"><?= $reg->title ?> (<?= $reg->cost ?>&euro;)</option>
                                 <?php } ?>
                             </select>
                             <span id="country-error" class="has-error help-block hidden">This field is required</span>
@@ -49,7 +54,7 @@
                 <input type="hidden" name="step" value="s1">
                 <input type="hidden" name="conf" value="<?= $keys->conf ?>">
                 <button id="continue" type="submit" class="btn btn-primary center-block">Continue</button>
-                
+
             </form>
         </div>
     </body>

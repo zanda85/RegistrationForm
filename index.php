@@ -71,8 +71,8 @@ class FrontController {
                 if (FrontController::populateParticipant($p, $request)) {
                     DbManager::instance()->updateParticipant($p);
                     DbManager::instance()->lazyLoadParticipant($p);
-                    $workshops = DbManager::instance()->getWorkshopsByConfId($p->getRegType()->conference_id);
-                    $extras = DbManager::instance()->getExtraByConfId($p->getRegType()->conference_id);
+                    $workshops = DbManager::instance()->getWorkshopsByConfId($p->getRegType()->conferenceId);
+                    $extras = DbManager::instance()->getExtraByConfId($p->getRegType()->conferenceId);
                     FrontController::loadWorkshopExtraStep($keys, $p, $workshops, $extras);
                 } else {
                     // something wrong, go to step 1
@@ -133,15 +133,15 @@ class FrontController {
 
     public static function loadSummary(&$request, $p, $numera) {
         $p = DbManager::instance()->getParticipantById($p->id);
-        $workshops = DbManager::instance()->getWorkshopsByConfId($p->getRegType()->conference_id);
-        $extras = DbManager::instance()->getExtraByConfId($p->getRegType()->conference_id);
+        $workshops = DbManager::instance()->getWorkshopsByConfId($p->getRegType()->conferenceId);
+        $extras = DbManager::instance()->getExtraByConfId($p->getRegType()->conferenceId);
         if($request['step'] == 's3' && $p->state != 1){
             // aggiungo workshop ed extra solo se sono al passo 3 e l'ordine 
             // non e' chiuso
             FrontController::addWorkshopExtra($p, $request, $extras);
         }
         DbManager::instance()->lazyLoadParticipant($p);
-        $conf = DbManager::instance()->getConferenceById($p->getRegType()->conference_id);
+        $conf = DbManager::instance()->getConferenceById($p->getRegType()->conferenceId);
         $request['conf'] = $conf->code;
         $keys = FrontController::populateKeys($request);
         DbManager::instance()->lazyLoadParticipant($p);
@@ -213,8 +213,19 @@ class FrontController {
         if (isset($request["taxNumber"])) {
             $p->taxid = $request["taxNumber"];
         }
-        if (isset($request["acm"])) {
-            $p->acm = $request["acm"];
+        if (isset($request["membershipName"])) {
+            $p->membershipName = $request["membershipName"];
+        }
+        if (isset($request["membershipId"])) {
+            $p->membershipId = $request["membershipId"];
+        }
+        
+        if (isset($request["cf"])) {
+            $p->cf = $request["cf"];
+        }
+        
+        if (isset($request["idNumber"])) {
+            $p->idNumber = $request["idNumber"];
         }
 
         if (isset($request["diet"])) {

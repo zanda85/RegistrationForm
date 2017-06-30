@@ -18,6 +18,32 @@ $(function() {
    
    $('#continue').prop('disabled', disableSubmit());
    
+   var country = $("#country");
+   
+   // for italian people we need the cf, for foreign people the id number
+   
+   var checkNation = function(country){
+       var val = country.val();
+        if(val == null || val == ''){
+            // no value selected
+            $("#cf").attr('data-required', false).parent().parent().hide();
+            $("#idNumber").attr('data-required', false).parent().parent().hide();
+        }else if(val == "IT"){
+            $("#cf").attr('data-required', true).parent().parent().show();
+            $("#idNumber").attr('data-required', false).val('').parent().parent().hide();
+        }else{
+            $("#cf").attr('data-required', false).val('').parent().parent().hide();
+            $("#idNumber").attr('data-required', true).parent().parent().show();
+        }
+   };
+   
+   if(country){
+        checkNation(country);
+        $("#country").change(function(){
+            checkNation($(this));
+        });
+    }
+   
    $("*[data-required='true']").change(function(){
        var id = $(this).attr('id');
        if(!$(this).val()){
@@ -31,5 +57,7 @@ $(function() {
        $('#continue').prop('disabled', disableSubmit());
    });
    
-   $(".spinner").spinner().width(50);
+   var spinners = $(".spinner");
+   if(spinners)
+        spinners.spinner().width(50);
 });

@@ -47,6 +47,7 @@ class DbManager {
                         regtype.title,
                         regtype.cost,
                         regtype.has_workshop, 
+                        regtype.has_membership,
                         regtype.available
                         from regtype join conference on 
                         regtype.conference_id = conference.id 
@@ -72,10 +73,11 @@ class DbManager {
         
         $stmt->bind_result(
                 $regtype->id, 
-                $regtype->conference_id,
+                $regtype->conferenceId,
                 $regtype->title,
                 $regtype->cost,
-                $regtype->has_workshop,
+                $regtype->hasWorkshop,
+                $regtype->hasMembership,
                 $regtype->available);
         
         while($stmt->fetch()){
@@ -126,7 +128,8 @@ class DbManager {
                         p.city,
                         p.zip,
                         p.taxid,
-                        p.acm,
+                        p.membership_id,
+                        p.membership_name,
                         p.meatfree,
                         p.fishfree,
                         p.shellfishfree,
@@ -141,6 +144,8 @@ class DbManager {
                         p.state,
                         p.ipaddress,
                         p.otp,
+                        p.cf,
+                        p.id_number,
                         r.id, 
                         r.conference_id, 
                         r.title,
@@ -188,7 +193,8 @@ class DbManager {
                 $p->city,
                 $p->zip,
                 $p->taxid,
-                $p->acm,
+                $p->membershipId,
+                $p->membershipName,
                 $p->meatfree,
                 $p->fishfree,
                 $p->shellfishfree,
@@ -203,11 +209,13 @@ class DbManager {
                 $p->state,
                 $p->ipaddress,
                 $p->otp,
+                $p->cf,
+                $p->idNumber,
                 $regtype->id, 
-                $regtype->conference_id,
+                $regtype->conferenceId,
                 $regtype->title,
                 $regtype->cost,
-                $regtype->has_workshop,
+                $regtype->hasWorkshop,
                 $regtype->available);
         
         if($stmt->fetch()){
@@ -246,7 +254,8 @@ class DbManager {
                         p.city,
                         p.zip,
                         p.taxid,
-                        p.acm,
+                        p.membership_name,
+                        p.membership_id,
                         p.meatfree,
                         p.fishfree,
                         p.shellfishfree,
@@ -259,11 +268,16 @@ class DbManager {
                         p.soyfree,
                         p.additionaldiet,
                         p.state,
+                        p.ipaddress,
+                        p.otp,
+                        p.cf,
+                        p.id_number,
                         r.id, 
                         r.conference_id, 
                         r.title,
                         r.cost,
                         r.has_workshop, 
+                        r.has_membership,
                         r.available
                         from participant as p 
                         join regtype as r on p.regtype_id = r.id
@@ -308,7 +322,8 @@ class DbManager {
                 $p->city,
                 $p->zip,
                 $p->taxid,
-                $p->acm,
+                $p->membershipName,
+                $p->membershipId,
                 $p->meatfree,
                 $p->fishfree,
                 $p->shellfishfree,
@@ -321,11 +336,16 @@ class DbManager {
                 $p->soyfree,
                 $p->additionaldiet,
                 $p->state,
+                $p->ipaddress,
+                $p->otp,
+                $p->cf,
+                $p->idNumber,
                 $regtype->id, 
-                $regtype->conference_id,
+                $regtype->conferenceId,
                 $regtype->title,
                 $regtype->cost,
-                $regtype->has_workshop,
+                $regtype->hasWorkshop,
+                $regtype->hasMembership,
                 $regtype->available);
         
         if($stmt->fetch()){
@@ -398,7 +418,8 @@ class DbManager {
                         city = ?,
                         zip = ?,
                         taxid = ?,
-                        acm = ?,
+                        membership_name = ?,
+                        membership_id = ?,
                         meatfree = ?,
                         fishfree = ?,
                         shellfishfree = ?,
@@ -411,7 +432,9 @@ class DbManager {
                         soyfree = ?,
                         additionaldiet = ?,
                         state = ?,
-                        ipaddress = ?
+                        ipaddress = ?,
+                        cf = ?,
+                        id_number = ?
                         where id = ?";
         
         $stmt = $mysqli->stmt_init();
@@ -422,7 +445,7 @@ class DbManager {
         }
         
         $ok = $stmt->bind_param(
-                'sssssssssssssssiiiiiiiiiisisi',
+                'ssssssssssssssssiiiiiiiiiisisssi',
                 $p->email,
                 $p->prefix,
                 $p->firstname,
@@ -437,7 +460,8 @@ class DbManager {
                 $p->city,
                 $p->zip,
                 $p->taxid,
-                $p->acm,
+                $p->membershipName,
+                $p->membershipId,
                 $p->meatfree,
                 $p->fishfree,
                 $p->shellfishfree,
@@ -451,6 +475,8 @@ class DbManager {
                 $p->additionaldiet,
                 $p->state,
                 $p->ipaddress,
+                $p->cf,
+                $p->idNumber,
                 $p->id);
         if(!$ok) {goto error;}
         

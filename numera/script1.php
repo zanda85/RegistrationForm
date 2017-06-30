@@ -11,19 +11,19 @@ Script1::dispatch($_REQUEST);
 class Script1 {
     
      public static function dispatch(&$request) {
-         error_log("[script 1] received request from  ".$_SERVER['REMOTE_ADDR']);
+         //error_log("[script 1] received request from  ".$_SERVER['REMOTE_ADDR']);
          if(isset($request['otp']) && isset($request['keyord']) && Script1::iptest()){
              $p = DbManager::instance()->getParticipantById($request['keyord']);
              DbManager::instance()->lazyLoadParticipant($p);
-             $conf = DbManager::instance()->getConferenceById($p->getRegType()->conference_id);
-             error_log("[script 1] set otp  ".$request['otp']. " keyord ".$request['keyord']);
+             $conf = DbManager::instance()->getConferenceById($p->getRegType()->conferenceId);
+             //error_log("[script 1] set otp  ".$request['otp']. " keyord ".$request['keyord']);
              if(DbManager::instance()->setOtp($p->id, $request['otp'])){
                  $code = 0; 
-                 error_log("[script 1] request ok");
+                 //error_log("[script 1] request ok");
              }else{
                  $p = new Participant();
                  $code = 1;
-                 error_log("[script 1] request not ok");
+                 //error_log("[script 1] request not ok");
              }
              
              
