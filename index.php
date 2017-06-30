@@ -210,8 +210,21 @@ class FrontController {
         } else {
             $ok = false;
         }
-        if (isset($request["taxNumber"])) {
-            $p->taxid = $request["taxNumber"];
+        if (isset($request["vat"])) {
+            $p->vat = $request["vat"];
+        }
+        if (isset($request["invoice"])) {
+            switch($request["invoice"]){
+                case 'personal':
+                    $p->invoiceType = 0;
+                    break;
+                case 'organization':
+                    $p->invoiceType = 1;
+                    break;
+                default :
+                    $p->invoiceType = 0;
+                    break;
+            }
         }
         if (isset($request["membershipName"])) {
             $p->membershipName = $request["membershipName"];

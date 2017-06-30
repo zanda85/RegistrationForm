@@ -27,7 +27,7 @@ class Participant {
     public $addressline2;
     public $city;
     public $zip;
-    public $taxid;
+    public $vat;
     public $membershipId;
     public $membershipName;
     public $meatfree = 0;
@@ -45,6 +45,7 @@ class Participant {
     public $otp;
     public $cf;
     public $idNumber;
+    public $invoiceType;
     
     // state 0 = not paid
     // state 1 = paid

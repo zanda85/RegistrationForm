@@ -127,7 +127,7 @@ class DbManager {
                         p.addressline2,
                         p.city,
                         p.zip,
-                        p.taxid,
+                        p.vat,
                         p.membership_id,
                         p.membership_name,
                         p.meatfree,
@@ -146,6 +146,7 @@ class DbManager {
                         p.otp,
                         p.cf,
                         p.id_number,
+                        p.invoice_type,
                         r.id, 
                         r.conference_id, 
                         r.title,
@@ -192,7 +193,7 @@ class DbManager {
                 $p->addressline2,
                 $p->city,
                 $p->zip,
-                $p->taxid,
+                $p->vat,
                 $p->membershipId,
                 $p->membershipName,
                 $p->meatfree,
@@ -211,6 +212,7 @@ class DbManager {
                 $p->otp,
                 $p->cf,
                 $p->idNumber,
+                $p->invoiceType,
                 $regtype->id, 
                 $regtype->conferenceId,
                 $regtype->title,
@@ -253,7 +255,7 @@ class DbManager {
                         p.addressline2,
                         p.city,
                         p.zip,
-                        p.taxid,
+                        p.vat,
                         p.membership_name,
                         p.membership_id,
                         p.meatfree,
@@ -272,6 +274,7 @@ class DbManager {
                         p.otp,
                         p.cf,
                         p.id_number,
+                        p.invoice_type,
                         r.id, 
                         r.conference_id, 
                         r.title,
@@ -321,7 +324,7 @@ class DbManager {
                 $p->addressline2,
                 $p->city,
                 $p->zip,
-                $p->taxid,
+                $p->vat,
                 $p->membershipName,
                 $p->membershipId,
                 $p->meatfree,
@@ -340,6 +343,7 @@ class DbManager {
                 $p->otp,
                 $p->cf,
                 $p->idNumber,
+                $p->invoiceType,
                 $regtype->id, 
                 $regtype->conferenceId,
                 $regtype->title,
@@ -417,7 +421,7 @@ class DbManager {
                         addressline2 = ?,
                         city = ?,
                         zip = ?,
-                        taxid = ?,
+                        vat = ?,
                         membership_name = ?,
                         membership_id = ?,
                         meatfree = ?,
@@ -434,7 +438,8 @@ class DbManager {
                         state = ?,
                         ipaddress = ?,
                         cf = ?,
-                        id_number = ?
+                        id_number = ?,
+                        invoice_type = ?
                         where id = ?";
         
         $stmt = $mysqli->stmt_init();
@@ -445,7 +450,7 @@ class DbManager {
         }
         
         $ok = $stmt->bind_param(
-                'ssssssssssssssssiiiiiiiiiisisssi',
+                'ssssssssssssssssiiiiiiiiiisisssii',
                 $p->email,
                 $p->prefix,
                 $p->firstname,
@@ -459,7 +464,7 @@ class DbManager {
                 $p->addressline2,
                 $p->city,
                 $p->zip,
-                $p->taxid,
+                $p->vat,
                 $p->membershipName,
                 $p->membershipId,
                 $p->meatfree,
@@ -477,6 +482,7 @@ class DbManager {
                 $p->ipaddress,
                 $p->cf,
                 $p->idNumber,
+                $p->invoiceType,
                 $p->id);
         if(!$ok) {goto error;}
         

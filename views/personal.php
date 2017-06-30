@@ -14,12 +14,12 @@ and open the template in the editor.
         <link rel="stylesheet" href="css/bootstrap-theme.min.css" >
         <link rel="stylesheet" href="css/custom.css" >
         <script src="js/bootstrap.min.js"></script>
-        
+
         <script src="js/personal.js"></script>
     </head>
     <body>
         <div class="container">
-            
+
             <form class="form-horizontal" method="post" action="index.php">
                 <img src="<?= $keys->logo ?>" alt="conference logo" class="img-fluid" style="width: 100%"/>
                 <h2>Personal information</h2>
@@ -96,51 +96,57 @@ and open the template in the editor.
                             <span id="company-error" class="has-error help-block hidden">This field is required</span>
                         </div>
                     </div>
+                    <?php if ($p->getRegType()->hasMembership == 1) { ?>
+                        <div class="form-group">
+                            <label for="membershipName" class="col-sm-2 control-label">Member of * </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="membershipName" 
+                                       value="<?= $p->membershipName ?>"
+                                       name="membershipName" placeholder="the name of the organization eligible for the discounted fee" data-required="true"> 
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="membershipId" class="col-sm-2 control-label">Membership Number *</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="membershipId" 
+                                       value="<?= $p->membershipId ?>"
+                                       name="membershipId" placeholder="your organization membership number" data-required="true">
+                            </div>
+                        </div>
+                    <?php } ?>
+
+                </div>
+
+                <h2>Billing information</h2>
+                <div class="well">
                     <div class="form-group">
-                        <label for="country" class="col-sm-2 control-label">Country *</label>
+                        <label for="country" class="col-sm-2 control-label">Invoice type *</label>
                         <div class="col-sm-10">
-                            <select id="country"  class="form-control" name="contry" data-required="true">
-                                <option value=""></option>
-                                <?php foreach ($nations as $key => $value) { ?>
-                                    <option value="<?=$key ?>"
-                                            <?php if($key == $p->country){ ?>
-                                               selected="selected"
+                            <div class="checkbox">
+
+                                <input type="radio" value="personal" name="invoice" 
+                                       <?php if ($p->invoiceType == 0) { ?>
+                                                checked="checked"
                                             <?php } ?>>
-                                            <?=$value ?>
-                                   </option>
-                                <?php } ?>
-                            </select>
-                            <span id="country-error" class="has-error help-block hidden">This field is required</span>
+                                Address the invoice to me <br/>
+                                <input type="radio" value="organization" name="invoice" 
+                                       <?php if ($p->invoiceType == 1) { ?>
+                                                checked="checked"
+                                            <?php } ?>>
+                                Address the invoice to my organization
+
+                            </div>
                         </div>
                     </div>
-                    
-                     <div class="form-group">
-                        <label for="cf" class="col-sm-2 control-label">CF *</label>
-                        <div class="col-sm-10">
-                            <input type="text"  class="form-control" id="cf" name="cf" 
-                                   value="<?= $p->cf ?>"
-                                   placeholder="the italian 'Codice Fiscale'" data-required="true">
-                            <span id="cf-error" class="has-error help-block hidden">This field is required</span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="idNumber" class="col-sm-2 control-label">ID Number *</label>
-                        <div class="col-sm-10">
-                            <input type="text"  class="form-control" id="idNumber" name="idNumber" 
-                                   value="<?= $p->idNumber ?>"
-                                   placeholder="A valid ID or Passport number" data-required="true">
-                            <span id="idNumber-error" class="has-error help-block hidden">This field is required</span>
-                        </div>
-                    </div>
-                    
-                    
+
+
+
                     <div class="form-group">
                         <label for="address1" class="col-sm-2 control-label">Address Line 1 *</label>
                         <div class="col-sm-10">
                             <input type="text"  class="form-control" id="address1" name="address1" 
                                    value="<?= $p->addressline1 ?>"
-                                   placeholder="" data-required="true">
+                                   placeholder="Insert your personal or your organization address, according to the invoice type" data-required="true">
                             <span id="address1-error" class="has-error help-block hidden">This field is required</span>
                         </div>
                     </div>
@@ -170,36 +176,56 @@ and open the template in the editor.
                             <span id="zip-error" class="has-error help-block hidden">This field is required</span>
                         </div>
                     </div>
-                    
-                    <?php if(false){ ?>
+
                     <div class="form-group">
-                        <label for="taxNumber" class="col-sm-2 control-label">Tax identification Number</label>
+                        <label for="country" class="col-sm-2 control-label">Country *</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="taxNumber" 
-                                   value="<?= $p->taxid ?>"
-                                   name="taxNumber" placeholder="">
+                            <select id="country"  class="form-control" name="contry" data-required="true">
+                                <option value=""></option>
+                                <?php foreach ($nations as $key => $value) { ?>
+                                    <option value="<?= $key ?>"
+                                    <?php if ($key == $p->country) { ?>
+                                                selected="selected"
+                                            <?php } ?>>
+                                                <?= $value ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                            <span id="country-error" class="has-error help-block hidden">This field is required</span>
                         </div>
                     </div>
-                    <?php } ?>
-                    
-                    <?php if($p->getRegType()->hasMembership == 1){ ?>
+
                     <div class="form-group">
-                        <label for="membershipName" class="col-sm-2 control-label">Member of * </label>
+                        <label for="cf" class="col-sm-2 control-label">CF *</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="membershipName" 
-                                   value="<?= $p->membershipName ?>"
-                                   name="membershipName" placeholder="the name of the organization eligible for the discounted fee" data-required="true"> 
+                            <input type="text"  class="form-control" id="cf" name="cf" 
+                                   value="<?= $p->cf ?>"
+                                   placeholder="the italian 'Codice Fiscale'" data-required="true">
+                            <span id="cf-error" class="has-error help-block hidden">This field is required</span>
                         </div>
                     </div>
+
                     <div class="form-group">
-                        <label for="membershipId" class="col-sm-2 control-label">Membership Number *</label>
+                        <label for="idNumber" class="col-sm-2 control-label">ID Number *</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="membershipId" 
-                                   value="<?= $p->membershipId ?>"
-                                   name="membershipId" placeholder="your organization membership number" data-required="true">
+                            <input type="text"  class="form-control" id="idNumber" name="idNumber" 
+                                   value="<?= $p->idNumber ?>"
+                                   placeholder="A valid ID or Passport number" data-required="true">
+                            <span id="idNumber-error" class="has-error help-block hidden">This field is required</span>
                         </div>
                     </div>
-                    <?php } ?>
+
+
+                    <div class="form-group">
+                        <label for="vat" class="col-sm-2 control-label">VAT number *</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="vat" 
+                                   value="<?= $p->vat ?>" data-required="true"
+                                   name="vat" placeholder="">
+                        </div>
+                    </div>
+
+
                 </div>
 
                 <h2>Dietary Restrictions</h2>
@@ -209,7 +235,7 @@ and open the template in the editor.
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" value="meatFree" name="diet[]" 
-                                        <?= $p->meatfree == 1 ? "checked='checked'" : "" ?>>
+                                           <?= $p->meatfree == 1 ? "checked='checked'" : "" ?>>
                                     Meat free diet
                                 </label>
                             </div>
@@ -218,7 +244,7 @@ and open the template in the editor.
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" value="fishFree" name="diet[]" 
-                                        <?= $p->fishfree == 1 ? "checked='checked'" : "" ?>>
+                                           <?= $p->fishfree == 1 ? "checked='checked'" : "" ?>>
                                     Fish free diet
                                 </label>
                             </div>
@@ -227,7 +253,7 @@ and open the template in the editor.
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" value="shellFishFree" name="diet[]" 
-                                        <?= $p->shellfishfree == 1 ? "checked='checked'" : "" ?>>
+                                           <?= $p->shellfishfree == 1 ? "checked='checked'" : "" ?>>
                                     Shellfish free diet
                                 </label>
                             </div>
@@ -238,7 +264,7 @@ and open the template in the editor.
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" value="eggFree" name="diet[]"
-                                        <?= $p->eggfree == 1 ? "checked='checked'" : "" ?>>
+                                           <?= $p->eggfree == 1 ? "checked='checked'" : "" ?>>
                                     Egg free diet
                                 </label>
                             </div>
@@ -247,7 +273,7 @@ and open the template in the editor.
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" value="milkFree" name="diet[]"
-                                        <?= $p->milkfree == 1 ? "checked='checked'" : "" ?>>
+                                           <?= $p->milkfree == 1 ? "checked='checked'" : "" ?>>
                                     Milk/Lactose free diet
                                 </label>
                             </div>
@@ -256,7 +282,7 @@ and open the template in the editor.
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" value="animalFree" name="diet[]"
-                                        <?= $p->animalfree == 1 ? "checked='checked'" : "" ?>>
+                                           <?= $p->animalfree == 1 ? "checked='checked'" : "" ?>>
                                     Diet free of animal derived products
                                 </label>
                             </div>
@@ -267,7 +293,7 @@ and open the template in the editor.
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" value="glutenFree" name="diet[]"
-                                        <?= $p->glutenfree == 1 ? "checked='checked'" : "" ?>>
+                                           <?= $p->glutenfree == 1 ? "checked='checked'" : "" ?>>
                                     Gluten free diet
                                 </label>
                             </div>
@@ -276,7 +302,7 @@ and open the template in the editor.
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" value="peanutFree" name="diet[]"
-                                        <?= $p->peanutfree == 1 ? "checked='checked'" : "" ?>>
+                                           <?= $p->peanutfree == 1 ? "checked='checked'" : "" ?>>
                                     Peanut Free diet
                                 </label>
                             </div>
@@ -285,7 +311,7 @@ and open the template in the editor.
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" value="wheatFree" name="diet[]"
-                                        <?= $p->wheatfree == 1 ? "checked='checked'" : "" ?>>
+                                           <?= $p->wheatfree == 1 ? "checked='checked'" : "" ?>>
                                     Wheat free diet
                                 </label>
                             </div>
@@ -296,7 +322,7 @@ and open the template in the editor.
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" value="soyFree" name="diet[]"
-                                        <?= $p->soyfree == 1 ? "checked='checked'" : "" ?>>
+                                           <?= $p->soyfree == 1 ? "checked='checked'" : "" ?>>
                                     Soy Free
                                 </label>
                             </div>
@@ -309,7 +335,7 @@ and open the template in the editor.
                         <label for="otherDiet" class="col-sm-2 control-label">List additional dietary restrictions of which we need to be aware</label>
                         <div class="col-sm-10">
                             <textarea rows="6" class="form-control" id="otherDiet" name="otherDiet" 
-                                placeholder=" For instance, any other allergies and intolerances that you may have, or any cultural/religious restrictions." ><?= $p->additionaldiet ?></textarea>
+                                      placeholder=" For instance, any other allergies and intolerances that you may have, or any cultural/religious restrictions." ><?= $p->additionaldiet ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -317,7 +343,7 @@ and open the template in the editor.
                 <input type="hidden" name="partId" value="<?= $keys->participantId ?>">
                 <input type="hidden" name="conf" value="<?= $keys->conf ?>">
                 <button id="continue" type="submit" class="btn btn-primary center-block">Continue</button>
-                
+
             </form>
         </div>
     </body>
