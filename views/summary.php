@@ -45,7 +45,7 @@
                     <h3>Billing Information</h3>
                     <?= $p->company ?> <br/>
                     <?= $p->addressline1 ?> <?= $p->addressline2 ?>, <?= $p->zip ?>, <?= $p->city ?>, <?= $p->country ?><br/>
-                    VAT:  <?= $p->vat ?>
+                    VAT number:  <?= $p->vat ?>
                     <?php } ?>
                     <h3>Dietary requirements</h3>
                     <?= $p->getDietaryString() ?>
