@@ -6,6 +6,7 @@
     <causale>
         <cod><?= $conf->code."-reg-".$p->id ?></cod> 
         <riga><?= $p->lastname." ".$p->firstname." ".$p->middlename ?></riga> 
+        <riga><?= $conf->title.": ".$p->getRegType()->title ?></riga>
     </causale>
     <email><?= $p->email ?></email> 
     <language>EN</language> 

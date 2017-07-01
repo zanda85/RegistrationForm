@@ -36,6 +36,7 @@ class Script1 {
      }
      
      public static function iptest(){
+         
          return $_SERVER['REMOTE_ADDR'] == '81.119.165.131' ||
                  $_SERVER['REMOTE_ADDR'] == '81.113.175.233'||
                  $_SERVER['REMOTE_ADDR'] == '127.0.0.1';
