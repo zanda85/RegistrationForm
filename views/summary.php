@@ -35,17 +35,17 @@
                 <h2>Registration summary</h2>
                 <div class="well">
                     <h3>Personal Information</h3>
-                    <?php if($p->invoiceType == 0){ ?>
-                    <?= $p->prefix ?> <?= $p->firstname ?> <?= $p->middlename ?> <?= $p->lastname ?> <br/>
-                    <?= $p->company ?> <br/>
-                    <?= $p->addressline1 ?> <?= $p->addressline2 ?>, <?= $p->zip ?>, <?= $p->city ?>, <?= $p->country ?><br/>
+                    <?php if ($p->invoiceType == 0) { ?>
+                        <?= $p->prefix ?> <?= $p->firstname ?> <?= $p->middlename ?> <?= $p->lastname ?> <br/>
+                        <?= $p->company ?> <br/>
+                        <?= $p->addressline1 ?> <?= $p->addressline2 ?>, <?= $p->zip ?>, <?= $p->city ?>, <?= $p->country ?><br/>
                     <?php } ?>
-                    <?php if($p->invoiceType == 1){ ?>
-                    <?= $p->prefix ?> <?= $p->firstname ?> <?= $p->middlename ?> <?= $p->lastname ?> 
-                    <h3>Billing Information</h3>
-                    <?= $p->company ?> <br/>
-                    <?= $p->addressline1 ?> <?= $p->addressline2 ?>, <?= $p->zip ?>, <?= $p->city ?>, <?= $p->country ?><br/>
-                    VAT number:  <?= $p->vat ?>
+                    <?php if ($p->invoiceType == 1) { ?>
+                        <?= $p->prefix ?> <?= $p->firstname ?> <?= $p->middlename ?> <?= $p->lastname ?> 
+                        <h3>Billing Information</h3>
+                        <?= $p->company ?> <br/>
+                        <?= $p->addressline1 ?> <?= $p->addressline2 ?>, <?= $p->zip ?>, <?= $p->city ?>, <?= $p->country ?><br/>
+                        VAT number:  <?= $p->vat ?>
                     <?php } ?>
                     <h3>Dietary requirements</h3>
                     <?= $p->getDietaryString() ?>
@@ -74,9 +74,60 @@
                     <!-- input per numera -->
                     <input type="hidden" name="pol_vendor" value="<?= $keys->vendor ?>">
                     <input type="hidden" name="pol_keyord" value="<?= $p->id ?>">
-                    <button id="continue" type="submit" class="btn btn-success center-block">Pay with credit card (<?= $p->getTotalCost() ?>&euro;)</button>
+                    <button id="continue" type="submit" class="btn btn-success center-block">
+                        Pay with credit card (<?= $p->getTotalCost() ?>&euro;)
+                    </button>
+                    <div style="text-align: center; margin-top:20px">
+                        or <a href="#" id="btn-bank" data-toggle="modal" 
+                              data-target="#bankModal" >
+                            Pay with bank transfer
+                        </a>
+                    </div>
                 </form>
             <?php } ?>
+        </div>
+        <div id="bankModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">How to pay the registration with a bank transfer</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>It is possible to pay the registration fee with a 
+                            bank transfer. There are two possible options:
+                        </p>
+                        <ol>
+                            <li>
+                                Bank transfer to "Dipartimento di Matematica e Informatica".<br/>
+                                IBAN: IT57Q0101504800000000043247<br/>
+                                Please use "Quota iscrizione convegno <?=$keys->conf?>" as the description of the transfer.
+                            </li>
+                            <li>
+                                If your University has an account at 
+                                "Banca d'Italia" (Italian national Bank), it is 
+                                also possible to do a transfer entry (giroconto) 
+                                at "conto di Tesoreria Unica n. 0037390 (BANKIT)"
+                            </li>
+                        </ol>
+                        <p>Once you completed the transfer, please send a copy 
+                            of the receipt to the conference organisers.
+                        </p>
+                        <p>If you have any questions or problems, please contact 
+                            the Department Secretary 
+                            <a href="mailto:stefaniacurto@amm.unica.it">
+                                Stefania Curto
+                            </a>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </body>
 </html>

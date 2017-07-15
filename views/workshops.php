@@ -41,7 +41,7 @@
                           }
                         }else{ ?>
                          <div class="col-sm-10">
-                             You can't register to any workshop in this conference.
+                             You can't register to any workshop in this conference. <br/>
                           </div>
                     <?php } ?>
                 </div>
@@ -62,7 +62,7 @@
                           }
                         }else{ ?>
                          <div class="col-sm-10">
-                             You can't add any extra to your registration in this conference.
+                             You can't add any extra to your registration in this conference. <br/>
                           </div>
                     <?php } ?>
                 </div>
