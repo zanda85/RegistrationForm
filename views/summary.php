@@ -103,7 +103,8 @@
                             <li>
                                 Bank transfer to "Dipartimento di Matematica e Informatica".<br/>
                                 IBAN: IT57Q0101504800000000043247<br/>
-                                Please use "Quota iscrizione convegno <?=$keys->conf?>" as the description of the transfer.
+                                Please use "Quota iscrizione convegno <?=$keys->conf?> 
+                                <?= $p->firstname ?> <?= $p->lastname ?>" as the description of the transfer.
                             </li>
                             <li>
                                 If your University has an account at 
