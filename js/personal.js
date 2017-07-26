@@ -33,6 +33,17 @@ $(function () {
 
     var invoice = $("input[name='invoice']:checked");
     var country = $("#country");
+    var birthDate = $("#birthDate");
+    
+    if(birthDate){
+        birthDate.datepicker({
+        dateFormat : 'mm/dd/yy',
+            changeMonth : true,
+            changeYear : true,
+            yearRange: '-100y:c+nn',
+            maxDate: '-1d'
+      });
+    }
 
     // for italian people we need the cf, for foreign people the id number
 

@@ -272,3 +272,5 @@ ALTER TABLE `workshop`
 ALTER TABLE `workshop_participant`
   ADD CONSTRAINT `workshop_participant_ibfk_1` FOREIGN KEY (`participant_id`) REFERENCES `participant` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `workshop_participant_ibfk_2` FOREIGN KEY (`workshop_id`) REFERENCES `workshop` (`id`) ON UPDATE CASCADE;
+
+ALTER TABLE `participant` ADD `birthDate` DATE NULL DEFAULT NULL AFTER `invoice_type`, ADD `birthPlace` VARCHAR(128) NOT NULL AFTER `birthDate`;

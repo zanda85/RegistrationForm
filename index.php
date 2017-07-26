@@ -15,6 +15,7 @@ class FrontController {
 
         header('Content-type: text/html; charset=ISO-8859-1');
         
+        //var_dump($request);
         
         if (isset($request['keyord'])) {
             $partId = $request['keyord'];
@@ -239,6 +240,15 @@ class FrontController {
         
         if (isset($request["idNumber"])) {
             $p->idNumber = $request["idNumber"];
+        }
+        
+        
+        if(isset($request["birthDate"])) {
+            $p->birthDate = $request["birthDate"];
+        }
+        
+        if(isset($request["birthPlace"])) {
+            $p->birthPlace = $request["birthPlace"];
         }
 
         if (isset($request["diet"])) {

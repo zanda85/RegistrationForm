@@ -112,48 +112,9 @@ class DbManager {
     public function getParticipantById($id){
         $mysqli = $this->getConnection();
         
-        $query = "select p.id,
-                        p.regtype_id, 
-                        p.email,
-                        p.prefix,
-                        p.firstname,
-                        p.middlename,
-                        p.lastname,
-                        p.jobtitle,
-                        p.badge,
-                        p.company,
-                        p.country,
-                        p.addressline1,
-                        p.addressline2,
-                        p.city,
-                        p.zip,
-                        p.vat,
-                        p.membership_id,
-                        p.membership_name,
-                        p.meatfree,
-                        p.fishfree,
-                        p.shellfishfree,
-                        p.eggfree, 
-                        p.milkfree, 
-                        p.animalfree, 
-                        p.glutenfree,
-                        p.peanutfree,
-                        p.wheatfree, 
-                        p.soyfree,
-                        p.additionaldiet,
-                        p.state,
-                        p.ipaddress,
-                        p.otp,
-                        p.cf,
-                        p.id_number,
-                        p.invoice_type,
-                        r.id, 
-                        r.conference_id, 
-                        r.title,
-                        r.cost,
-                        r.has_workshop, 
-                        r.available
-                        from participant as p 
+        $query = "select ".
+                        $this->getParticipantFields()
+                        ."from participant as p 
                         join regtype as r on p.regtype_id = r.id
                         where p.id = ?";
         
@@ -171,64 +132,8 @@ class DbManager {
                  $id);
         if(!$ok) {goto error;}
         
-        $ok = $stmt->execute();
-        if(!$ok) {goto error;}
+        return $this->retrieveParticipant($mysqli, $stmt);
         
-        $p = new Participant();
-        $regtype = new RegType();
-        
-        $stmt->bind_result(
-                $p->id,
-                $p->regtype_id,
-                $p->email,
-                $p->prefix,
-                $p->firstname,
-                $p->middlename,
-                $p->lastname,
-                $p->jobtitle,
-                $p->badge,
-                $p->company,
-                $p->country,
-                $p->addressline1,
-                $p->addressline2,
-                $p->city,
-                $p->zip,
-                $p->vat,
-                $p->membershipId,
-                $p->membershipName,
-                $p->meatfree,
-                $p->fishfree,
-                $p->shellfishfree,
-                $p->eggfree,
-                $p->milkfree, 
-                $p->animalfree, 
-                $p->glutenfree,
-                $p->peanutfree,
-                $p->wheatfree,
-                $p->soyfree,
-                $p->additionaldiet,
-                $p->state,
-                $p->ipaddress,
-                $p->otp,
-                $p->cf,
-                $p->idNumber,
-                $p->invoiceType,
-                $regtype->id, 
-                $regtype->conferenceId,
-                $regtype->title,
-                $regtype->cost,
-                $regtype->hasWorkshop,
-                $regtype->available);
-        
-        if($stmt->fetch()){
-            $mysqli->close();
-            $p->setRegType($regtype);
-            return $p;
-        }else{
-            $mysqli->close();
-            return null;
-        }
-
         error: {
             error_log("[DbManager] error on database access ");
             $mysqli->close();
@@ -240,49 +145,9 @@ class DbManager {
     public function getParticipantByEmailRegType($email, $regtype){
         $mysqli = $this->getConnection();
         
-        $query = "select p.id,
-                        p.regtype_id, 
-                        p.email,
-                        p.prefix,
-                        p.firstname,
-                        p.middlename,
-                        p.lastname,
-                        p.jobtitle,
-                        p.badge,
-                        p.company,
-                        p.country,
-                        p.addressline1,
-                        p.addressline2,
-                        p.city,
-                        p.zip,
-                        p.vat,
-                        p.membership_name,
-                        p.membership_id,
-                        p.meatfree,
-                        p.fishfree,
-                        p.shellfishfree,
-                        p.eggfree, 
-                        p.milkfree, 
-                        p.animalfree, 
-                        p.glutenfree,
-                        p.peanutfree,
-                        p.wheatfree, 
-                        p.soyfree,
-                        p.additionaldiet,
-                        p.state,
-                        p.ipaddress,
-                        p.otp,
-                        p.cf,
-                        p.id_number,
-                        p.invoice_type,
-                        r.id, 
-                        r.conference_id, 
-                        r.title,
-                        r.cost,
-                        r.has_workshop, 
-                        r.has_membership,
-                        r.available
-                        from participant as p 
+        $query = "select ".
+                        $this->getParticipantFields()
+                        ."from participant as p 
                         join regtype as r on p.regtype_id = r.id
                         where p.email = ? and 
                         p.regtype_id = ?";
@@ -302,6 +167,65 @@ class DbManager {
                  $regtype);
         if(!$ok) {goto error;}
         
+        return $this->retrieveParticipant($mysqli, $stmt);
+        
+        error: {
+            error_log("[DbManager] error on database access ");
+            $mysqli->close();
+            return null;
+        }
+        
+    }
+    
+    private function getParticipantFields(){
+        return "p.id,
+                p.regtype_id, 
+                p.email,
+                p.prefix,
+                p.firstname,
+                p.middlename,
+                p.lastname,
+                p.jobtitle,
+                p.badge,
+                p.company,
+                p.country,
+                p.addressline1,
+                p.addressline2,
+                p.city,
+                p.zip,
+                p.vat,
+                p.membership_id,
+                p.membership_name,
+                p.meatfree,
+                p.fishfree,
+                p.shellfishfree,
+                p.eggfree, 
+                p.milkfree, 
+                p.animalfree, 
+                p.glutenfree,
+                p.peanutfree,
+                p.wheatfree, 
+                p.soyfree,
+                p.additionaldiet,
+                p.state,
+                p.ipaddress,
+                p.otp,
+                p.cf,
+                p.id_number,
+                p.invoice_type,
+                p.birth_place,
+                DATE_FORMAT(p.birth_date, '%m/%d/%Y'),
+                r.id, 
+                r.conference_id, 
+                r.title,
+                r.cost,
+                r.has_workshop, 
+                r.has_membership,
+                r.available 
+                ";
+    }
+    
+    private function retrieveParticipant($mysqli, $stmt){
         $ok = $stmt->execute();
         if(!$ok) {goto error;}
         
@@ -325,8 +249,8 @@ class DbManager {
                 $p->city,
                 $p->zip,
                 $p->vat,
-                $p->membershipName,
                 $p->membershipId,
+                $p->membershipName,
                 $p->meatfree,
                 $p->fishfree,
                 $p->shellfishfree,
@@ -344,6 +268,8 @@ class DbManager {
                 $p->cf,
                 $p->idNumber,
                 $p->invoiceType,
+                $p->birthPlace,
+                $p->birthDate,
                 $regtype->id, 
                 $regtype->conferenceId,
                 $regtype->title,
@@ -366,7 +292,6 @@ class DbManager {
             $mysqli->close();
             return null;
         }
-        
     }
     
     private function createEmptyParticipant($email, $regtype){
@@ -439,7 +364,9 @@ class DbManager {
                         ipaddress = ?,
                         cf = ?,
                         id_number = ?,
-                        invoice_type = ?
+                        invoice_type = ?,
+                        birth_place = ?,
+                        birth_date = STR_TO_DATE(?, '%m/%d/%Y')
                         where id = ?";
         
         $stmt = $mysqli->stmt_init();
@@ -450,7 +377,7 @@ class DbManager {
         }
         
         $ok = $stmt->bind_param(
-                'ssssssssssssssssiiiiiiiiiisisssii',
+                'ssssssssssssssssiiiiiiiiiisisssissi',
                 $p->email,
                 $p->prefix,
                 $p->firstname,
@@ -483,6 +410,8 @@ class DbManager {
                 $p->cf,
                 $p->idNumber,
                 $p->invoiceType,
+                $p->birthPlace,
+                $p->birthDate,
                 $p->id);
         if(!$ok) {goto error;}
         

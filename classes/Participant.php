@@ -46,9 +46,12 @@ class Participant {
     public $cf;
     public $idNumber;
     public $invoiceType;
+    public $birthDate;
+    public $birthPlace;
     
     // state 0 = not paid
-    // state 1 = paid
+    // state 1 = paid with credit card
+    // state 2 = paid with bank transfer
     public $state = 0;
     
     private $regtype;

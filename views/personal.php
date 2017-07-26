@@ -13,7 +13,11 @@ and open the template in the editor.
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/bootstrap-theme.min.css" >
         <link rel="stylesheet" href="css/custom.css" >
+        <link rel="stylesheet" href="css/jquery-ui.min.css" >
+        <link rel="stylesheet" href="css/jquery-ui.structure.min.css" >
+        <link rel="stylesheet" href="css/jquery-ui.theme.min.css" >
         <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery-ui.min.js"></script>
 
         <script src="js/personal.js"></script>
     </head>
@@ -67,6 +71,22 @@ and open the template in the editor.
                             <input type="text"  class="form-control" id="lastName" name="lastName" 
                                    value="<?= $p->lastname ?>"
                                    placeholder="Cicerone" data-required="true">
+                            <span id="lastName-error" class="has-error help-block hidden">This field is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthPlace" class="col-sm-2 control-label">Place of birth *</label>
+                        <div class="col-sm-10">
+                            <input type="text"  class="form-control" id="birthPlace" name="birthPlace" 
+                                   value="<?= $p->birthPlace ?>"  data-required="true">
+                            <span id="lastName-error" class="has-error help-block hidden">This field is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthDate" class="col-sm-2 control-label">Date of birth *</label>
+                        <div class="col-sm-10">
+                            <input type="text"  class="form-control" id="birthDate" name="birthDate" 
+                                   value="<?= $p->birthDate ?>"  data-required="true" placeholder="mm/dd/yyyy">
                             <span id="lastName-error" class="has-error help-block hidden">This field is required</span>
                         </div>
                     </div>

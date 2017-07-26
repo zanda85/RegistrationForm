@@ -39,9 +39,16 @@
                         <?= $p->prefix ?> <?= $p->firstname ?> <?= $p->middlename ?> <?= $p->lastname ?> <br/>
                         <?= $p->company ?> <br/>
                         <?= $p->addressline1 ?> <?= $p->addressline2 ?>, <?= $p->zip ?>, <?= $p->city ?>, <?= $p->country ?><br/>
+                        Date and place of birth: <?= $p->birthDate ?>, <?= $p->birthPlace ?><br/>
+                        <?php if (!empty($p->idNumber)) { echo "ID number: $p->idNumber <br/>";} ?>
+                        <?php if (!empty($p->cf)) { echo "CF: $p->cf <br/>";} ?>
+                        
                     <?php } ?>
                     <?php if ($p->invoiceType == 1) { ?>
-                        <?= $p->prefix ?> <?= $p->firstname ?> <?= $p->middlename ?> <?= $p->lastname ?> 
+                        <?= $p->prefix ?> <?= $p->firstname ?> <?= $p->middlename ?> <?= $p->lastname ?> <br/>
+                        Date and place of birth: <?= $p->birthDate ?>, <?= $p->birthPlace ?><br/>
+                        <?php if (!empty($p->idNumber)) { echo "ID number: $p->idNumber <br/>";} ?>
+                        <?php if (!empty($p->cf)) { echo "CF: $p->cf <br/>";} ?>
                         <h3>Billing Information</h3>
                         <?= $p->company ?> <br/>
                         <?= $p->addressline1 ?> <?= $p->addressline2 ?>, <?= $p->zip ?>, <?= $p->city ?>, <?= $p->country ?><br/>
