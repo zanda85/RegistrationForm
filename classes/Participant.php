@@ -146,4 +146,16 @@ class Participant {
         }
         return 0;
     }
+    
+    public function getStateString(){
+       return Participant::getStateStringFromCode($this->state);
+    }
+    
+    public static function getStateStringFromCode($code){
+         switch($code){
+            case 0: return 'None';
+            case 1: return 'Card';
+            case 2: return 'Bank';
+        }
+    }
 }

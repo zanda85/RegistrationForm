@@ -5,9 +5,9 @@ include_once 'classes/NationList.php';
 
 date_default_timezone_set("Europe/Rome");
 // punto unico di accesso all'applicazione
-FrontController::dispatch($_REQUEST);
+AdminController::dispatch($_REQUEST);
 
-class FrontController {
+class AdminController {
 
     public static function dispatch(&$request) {
 
@@ -21,7 +21,7 @@ class FrontController {
             $partId = $request['keyord'];
             $p = new Participant();
             $p->id = filter_var($partId, FILTER_VALIDATE_INT) ? $partId : -1;
-            FrontController::loadSummary($request, $p, true);
+            AdminController::loadSummary($request, $p, true);
             return;
         }
 
@@ -29,9 +29,9 @@ class FrontController {
         
 
         $step = $request['step'];
-        $keys = FrontController::populateKeys( $request);
+        $keys = AdminController::populateKeys( $request);
         if($keys == null){
-            FrontController::write404();
+            AdminController::write404();
             return;
         }
 
@@ -49,18 +49,18 @@ class FrontController {
                     $keys->regId = $regId;
                     $p = DbManager::instance()->getOrCreateParticipant($keys->email, $keys->regId);
                     
-                    if($p->state == 1){
+                    if($p->state  > 0){
                         // registration completed
-                        FrontController::loadSummary($request, $p, false);
+                        AdminController::loadSummary($request, $p, false);
                     }else{
                         // registration in progress
                         $keys->participantId = $p->id;
-                        FrontController::loadPersonalStep($keys, $p);
+                        AdminController::loadPersonalStep($keys, $p);
                     }
                     
                     
                 } else {
-                    FrontController::loadInitialStep($keys);
+                    AdminController::loadInitialStep($keys);
                 }
                 break;
 
@@ -69,18 +69,18 @@ class FrontController {
                 $p = new Participant();
                 $p->id = filter_var($partId, FILTER_VALIDATE_INT) ? $partId : -1;
                 $p = DbManager::instance()->getParticipantById($partId);
-                if (FrontController::populateParticipant($p, $request)) {
+                if (AdminController::populateParticipant($p, $request)) {
                     DbManager::instance()->updateParticipant($p);
                     DbManager::instance()->lazyLoadParticipant($p);
                     $workshops = DbManager::instance()->getWorkshopsByConfId($p->getRegType()->conferenceId);
                     $extras = DbManager::instance()->getExtraByConfId($p->getRegType()->conferenceId);
-                    FrontController::loadWorkshopExtraStep($keys, $p, $workshops, $extras);
+                    AdminController::loadWorkshopExtraStep($keys, $p, $workshops, $extras);
                 } else {
                     // something wrong, go to step 1
                     $keys->email = $p->email;
                     $keys->regId = $p->regtype_id;
                     $keys->participantId = $p->id;
-                    FrontController::loadPersonalStep($keys, $p);
+                    AdminController::loadPersonalStep($keys, $p);
                 }
                 break;
 
@@ -88,12 +88,12 @@ class FrontController {
                 $partId = $request['partId'];
                 $p = new Participant();
                 $p->id = filter_var($partId, FILTER_VALIDATE_INT) ? $partId : -1;
-                FrontController::loadSummary($request, $p, false);
+                AdminController::loadSummary($request, $p, false);
                 break;
 
 
             default:
-                FrontController::loadInitialStep($keys);
+                AdminController::loadInitialStep($keys);
                 break;
         }
     }
@@ -139,12 +139,12 @@ class FrontController {
         if($request['step'] == 's3' && $p->state != 1){
             // aggiungo workshop ed extra solo se sono al passo 3 e l'ordine 
             // non e' chiuso
-            FrontController::addWorkshopExtra($p, $request, $extras);
+            AdminController::addWorkshopExtra($p, $request, $extras);
         }
         DbManager::instance()->lazyLoadParticipant($p);
         $conf = DbManager::instance()->getConferenceById($p->getRegType()->conferenceId);
         $request['conf'] = $conf->code;
-        $keys = FrontController::populateKeys($request);
+        $keys = AdminController::populateKeys($request);
         DbManager::instance()->lazyLoadParticipant($p);
         if($p->state == 1){
             $state = "ok";
