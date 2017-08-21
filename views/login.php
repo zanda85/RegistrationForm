@@ -43,6 +43,7 @@
                         <div class="col-sm-10">
                             <select id="regtype"  class="form-control" name="regtype" data-required="true">
                                 <option value=""></option>
+                                <option value="reg-1">View registration summary</option>
                                 <?php foreach ($regs as $reg) { ?>
                                     <option value="reg<?= $reg->id ?>"><?= $reg->title ?> (<?= $reg->cost ?>&euro;)</option>
                                 <?php } ?>

@@ -205,9 +205,41 @@ class DbManager {
         }
     }
 
+    public function getParticipantSummary($email){
+        $mysqli = $this->getConnection();
+        
+        $query = "select " .
+                $this->getParticipantFields()
+                . "from participant as p 
+                        join regtype as r on p.regtype_id = r.id
+                        where p.email = ? and 
+                        p.state > 0";
+
+        $stmt = $mysqli->stmt_init();
+        $stmt->prepare($query);
+
+        if (!$stmt) {
+            goto error;
+        }
+        
+        $ok = $stmt->bind_param(
+                's', $email);
+        if (!$ok) {
+            goto error;
+        }
+
+        return $this->retrieveParticipant($mysqli, $stmt);
+
+        error: {
+            error_log("[DbManager] error on database access ");
+            $mysqli->close();
+            return null;
+        }
+    }
+    
     public function getParticipantByEmailRegType($email, $regtype) {
         $mysqli = $this->getConnection();
-
+        
         $query = "select " .
                 $this->getParticipantFields()
                 . "from participant as p 

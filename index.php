@@ -14,9 +14,9 @@ class AdminController {
         //TODO inserire un blocco per connessioni non https
 
         header('Content-type: text/html; charset=ISO-8859-1');
-        
+
         //var_dump($request);
-        
+
         if (isset($request['keyord'])) {
             $partId = $request['keyord'];
             $p = new Participant();
@@ -25,12 +25,12 @@ class AdminController {
             return;
         }
 
-        
-        
+
+
 
         $step = $request['step'];
-        $keys = AdminController::populateKeys( $request);
-        if($keys == null){
+        $keys = AdminController::populateKeys($request);
+        if ($keys == null) {
             AdminController::write404();
             return;
         }
@@ -46,19 +46,33 @@ class AdminController {
                         filter_var($email1, FILTER_VALIDATE_EMAIL) &&
                         filter_var($regId, FILTER_VALIDATE_INT)) {
                     $keys->email = $email1;
-                    $keys->regId = $regId;
-                    $p = DbManager::instance()->getOrCreateParticipant($keys->email, $keys->regId);
-                    
-                    if($p->state  > 0){
-                        // registration completed
-                        AdminController::loadSummary($request, $p, false);
-                    }else{
-                        // registration in progress
-                        $keys->participantId = $p->id;
-                        AdminController::loadPersonalStep($keys, $p);
+                    $keys->regId = filter_var($regId, FILTER_VALIDATE_INT);
+
+                    switch ($keys->regId) {
+                        case -1:
+                            // request for registration summary
+                            $p = DbManager::instance()->getParticipantSummary($keys->email);
+                            if (!isset($p)) {
+                                include 'views/noRegistration.php';
+                                return;
+                            }
+                            $keys->regId = -1;
+                            $logo = $keys->logo;
+                            AdminController::loadSummary($request, $p, false);
+                            break;
+
+                        default:
+                            $p = DbManager::instance()->getOrCreateParticipant($keys->email, $keys->regId);
+                            if ($p->state > 0) {
+                                // registration completed
+                                AdminController::loadSummary($request, $p, false);
+                            } else {
+                                // registration in progress
+                                $keys->participantId = $p->id;
+                                AdminController::loadPersonalStep($keys, $p);
+                            }
+                            break;
                     }
-                    
-                    
                 } else {
                     AdminController::loadInitialStep($keys);
                 }
@@ -98,23 +112,23 @@ class AdminController {
         }
     }
 
-    public static function populateKeys( &$request){
+    public static function populateKeys(&$request) {
         $keys = new Keys();
-        
-        if(isset($request['conf'])){
+
+        if (isset($request['conf'])) {
             $c = DbManager::instance()->getConferenceByCode($request['conf']);
-            if($c != null){
+            if ($c != null) {
                 $keys->logo = "events/$c->code/logo.png";
                 $keys->conf = $c->code;
                 $keys->numeraUrl = $c->numeraurl;
                 $keys->vendor = $c->vendor;
                 return $keys;
-            }else{
+            } else {
                 return null;
             }
         }
     }
-    
+
     public static function loadInitialStep($keys) {
 
         $regs = DbManager::instance()->getRegTypes($keys->conf, 1);
@@ -136,7 +150,7 @@ class AdminController {
         $p = DbManager::instance()->getParticipantById($p->id);
         $workshops = DbManager::instance()->getWorkshopsByConfId($p->getRegType()->conferenceId);
         $extras = DbManager::instance()->getExtraByConfId($p->getRegType()->conferenceId);
-        if($request['step'] == 's3' && $p->state != 1){
+        if ($request['step'] == 's3' && $p->state != 1) {
             // aggiungo workshop ed extra solo se sono al passo 3 e l'ordine 
             // non e' chiuso
             AdminController::addWorkshopExtra($p, $request, $extras);
@@ -146,16 +160,16 @@ class AdminController {
         $request['conf'] = $conf->code;
         $keys = AdminController::populateKeys($request);
         DbManager::instance()->lazyLoadParticipant($p);
-        if($p->state == 1){
+        if ($p->state == 1) {
             $state = "ok";
         }
-        if($numera && $p->state == 0){
+        if ($numera && $p->state == 0) {
             $state = "nok";
         }
-        if(!$numera && $p->state == 0){
+        if (!$numera && $p->state == 0) {
             $state = "pay";
         }
-        
+
         include 'views/summary.php';
     }
 
@@ -215,7 +229,7 @@ class AdminController {
             $p->vat = $request["vat"];
         }
         if (isset($request["invoice"])) {
-            switch($request["invoice"]){
+            switch ($request["invoice"]) {
                 case 'personal':
                     $p->invoiceType = 0;
                     break;
@@ -233,21 +247,21 @@ class AdminController {
         if (isset($request["membershipId"])) {
             $p->membershipId = $request["membershipId"];
         }
-        
+
         if (isset($request["cf"])) {
             $p->cf = $request["cf"];
         }
-        
+
         if (isset($request["idNumber"])) {
             $p->idNumber = $request["idNumber"];
         }
-        
-        
-        if(isset($request["birthDate"])) {
+
+
+        if (isset($request["birthDate"])) {
             $p->birthDate = $request["birthDate"];
         }
-        
-        if(isset($request["birthPlace"])) {
+
+        if (isset($request["birthPlace"])) {
             $p->birthPlace = $request["birthPlace"];
         }
 
@@ -304,16 +318,15 @@ class AdminController {
         }
 
         DbManager::instance()->deleteExtras($p->id);
-        foreach ($extras as $extra){
-            $rk = "e".$extra->id;
+        foreach ($extras as $extra) {
+            $rk = "e" . $extra->id;
             if (isset($request[$rk])) {
                 $val = filter_var($request[$rk], FILTER_VALIDATE_INT) ? $request[$rk] : 0;
-                if($val > 0){
+                if ($val > 0) {
                     DbManager::instance()->insertExtra($p->id, $extra->id, $val);
                 }
             }
         }
-        
     }
 
     public static function write404() {
@@ -334,6 +347,7 @@ class Keys {
     public $regId;
     public $participantId;
     public $vendor;
+
 }
 
 ?>
