@@ -103,25 +103,38 @@ class DbManager {
         return $participant;
     }
 
-    public function getParticipants($confId, $state) {
+    public function getParticipants($confId, $s) {
         $mysqli = $this->getConnection();
-
-        if ($state == -1) {
-            $query = "select " .
-                    $this->getParticipantFields()
-                    . "from participant as p 
+        $state = intval($s);
+        
+        switch ($state) {
+            case -1:
+                $query = "select " .
+                        $this->getParticipantFields()
+                        . "from participant as p 
                         join regtype as r on p.regtype_id = r.id
                         where conference_id = ? 
                         order by p.id";
-        } else {
-            $s = intval($state);
-            $query = "select " .
-                    $this->getParticipantFields()
-                    . "from participant as p 
+                break;
+            case -2:
+                $query = "select " .
+                        $this->getParticipantFields()
+                        . "from participant as p 
                         join regtype as r on p.regtype_id = r.id
-                        where conference_id = ? and p.state = $s "
-                    . "order by p.id";
+                        where conference_id = ? and p.state > 0
+                        order by p.id";
+                break;
+            default:
+                
+                $query = "select " .
+                        $this->getParticipantFields()
+                        . "from participant as p 
+                        join regtype as r on p.regtype_id = r.id
+                        where conference_id = ? and p.state = ? 
+                        order by p.id";
+                break;
         }
+
 
 
         $stmt = $mysqli->stmt_init();
@@ -133,8 +146,14 @@ class DbManager {
 
         $id = filter_var($id, FILTER_VALIDATE_INT) ? $id : -1;
 
-        $ok = $stmt->bind_param(
+        if($state >= 0){
+            $ok = $stmt->bind_param(
+                'ii', $confId, $state);
+        }else{
+            $ok = $stmt->bind_param(
                 'i', $confId);
+        }
+        
         if (!$ok) {
             goto error;
         }
@@ -155,11 +174,11 @@ class DbManager {
             $participants [] = $p;
             $p = new Participant();
             $regtype = new RegType();
-            
+
             $this->bindParticipant($stmt, $p, $regtype);
             $p->setRegType($regtype);
         }
-        
+
         $stmt->close();
         $mysqli->close();
 
@@ -205,9 +224,9 @@ class DbManager {
         }
     }
 
-    public function getParticipantSummary($email){
+    public function getParticipantSummary($email) {
         $mysqli = $this->getConnection();
-        
+
         $query = "select " .
                 $this->getParticipantFields()
                 . "from participant as p 
@@ -221,7 +240,7 @@ class DbManager {
         if (!$stmt) {
             goto error;
         }
-        
+
         $ok = $stmt->bind_param(
                 's', $email);
         if (!$ok) {
@@ -236,10 +255,10 @@ class DbManager {
             return null;
         }
     }
-    
+
     public function getParticipantByEmailRegType($email, $regtype) {
         $mysqli = $this->getConnection();
-        
+
         $query = "select " .
                 $this->getParticipantFields()
                 . "from participant as p 
@@ -321,50 +340,7 @@ class DbManager {
 
     private function bindParticipant($stmt, $p, $regtype) {
         $stmt->bind_result(
-                $p->id, 
-                $p->regtype_id, 
-                $p->email, 
-                $p->prefix, 
-                $p->firstname, 
-                $p->middlename, 
-                $p->lastname, 
-                $p->jobtitle, 
-                $p->badge, 
-                $p->company, 
-                $p->country, 
-                $p->addressline1, 
-                $p->addressline2, 
-                $p->city, 
-                $p->zip, 
-                $p->vat, 
-                $p->membershipId, 
-                $p->membershipName, 
-                $p->meatfree, 
-                $p->fishfree, 
-                $p->shellfishfree, 
-                $p->eggfree, 
-                $p->milkfree, 
-                $p->animalfree, 
-                $p->glutenfree, 
-                $p->peanutfree, 
-                $p->wheatfree, 
-                $p->soyfree, 
-                $p->additionaldiet, 
-                $p->state, 
-                $p->ipaddress, 
-                $p->otp, 
-                $p->cf, 
-                $p->idNumber, 
-                $p->invoiceType, 
-                $p->birthPlace, 
-                $p->birthDate, 
-                $regtype->id, 
-                $regtype->conferenceId, 
-                $regtype->title, 
-                $regtype->cost, 
-                $regtype->hasWorkshop, 
-                $regtype->hasMembership, 
-                $regtype->available);
+                $p->id, $p->regtype_id, $p->email, $p->prefix, $p->firstname, $p->middlename, $p->lastname, $p->jobtitle, $p->badge, $p->company, $p->country, $p->addressline1, $p->addressline2, $p->city, $p->zip, $p->vat, $p->membershipId, $p->membershipName, $p->meatfree, $p->fishfree, $p->shellfishfree, $p->eggfree, $p->milkfree, $p->animalfree, $p->glutenfree, $p->peanutfree, $p->wheatfree, $p->soyfree, $p->additionaldiet, $p->state, $p->ipaddress, $p->otp, $p->cf, $p->idNumber, $p->invoiceType, $p->birthPlace, $p->birthDate, $regtype->id, $regtype->conferenceId, $regtype->title, $regtype->cost, $regtype->hasWorkshop, $regtype->hasMembership, $regtype->available);
     }
 
     private function retrieveParticipant($mysqli, $stmt) {

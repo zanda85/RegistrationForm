@@ -137,6 +137,7 @@ class AdminController {
             '#ID',
             'Last Name',
             'First Name',
+            'email',
             'Cost',
             'State',
             'Company',
@@ -152,22 +153,24 @@ class AdminController {
         fputcsv($f, $line, $delimiter);
 
         foreach ($participants as $p) {
-            $line[0] = $p->id;
-            $line[1] = $p->lastname;
-            $line[2] = strlen(trim($p->middlename)) > 0 ?
+            $i = 0;
+            $line[$i++] = $p->id;
+            $line[$i++] = $p->lastname;
+            $line[$i++] = strlen(trim($p->middlename)) > 0 ?
                     $p->middlename . " " . $p->firstname :
                     $p->firstname;
-            $line[3] = $p->getTotalCost();
-            $line[4] = $p->getStateString();
-            $line[5] = $p->company;
-            $line[6] = $p->birthDate;
-            $line[7] = $p->birthPlace;
-            $line[8] = $p->cf;
-            $line[9] = $p->vat;
-            $line[10] = $p->addressline1 . "\n\r" . $p->addressline2;
-            $line[11] = $p->zip;
-            $line[12] = $p->city;
-            $line[13] = $p->country;
+            $line[$i++] = $p->email;
+            $line[$i++] = $p->getTotalCost();
+            $line[$i++] = $p->getStateString();
+            $line[$i++] = $p->company;
+            $line[$i++] = $p->birthDate;
+            $line[$i++] = $p->birthPlace;
+            $line[$i++] = $p->cf;
+            $line[$i++] = $p->vat;
+            $line[$i++] = $p->addressline1 . "\n\r" . $p->addressline2;
+            $line[$i++] = $p->zip;
+            $line[$i++] = $p->city;
+            $line[$i++] = $p->country;
             fputcsv($f, $line, $delimiter);
         }
     }

@@ -42,6 +42,7 @@
                             <div class="col-sm-10">
                                 <select id="state" name="state" class="form-control">
                                     <option value="-1" <?= $state == -1 ? 'selected' : '' ?> >All</option>
+                                    <option value="-2" <?= $state == -2 ? 'selected' : '' ?> >Completed (all payment methods)</option>
                                     <option value="0"  <?= $state == 0 ? 'selected' : '' ?>>Not completed</option>
                                     <option value="1"  <?= $state == 1 ? 'selected' : '' ?>>Credit card</option>
                                     <option value="2"  <?= $state == 2 ? 'selected' : '' ?>>Bank transfer</option>
@@ -66,6 +67,7 @@
                             <th>#ID</th>
                             <th>Last Name</th>
                             <th>First Name</th>
+                            <th>Email</th>
                             <th>Cost</th>
                             <th>State</th>
                             <th>Company</th>
@@ -88,6 +90,7 @@
                                 <td><?= $p->id ?></td>
                                 <td><?= $p->lastname ?></td>
                                 <td><?= $p->middlename ?> <?= $p->firstname ?></td>
+                                <td><?= $p->email ?></td>
                                 <td><?= $p->getTotalCost() ?></td>
                                 <td><?= $p->getStateString() ?><br/>
                                     <?php if ($p->state == 0) { ?>
