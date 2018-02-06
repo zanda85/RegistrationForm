@@ -78,16 +78,16 @@ and open the template in the editor.
                         <label for="birthPlace" class="col-sm-2 control-label">Place of birth *</label>
                         <div class="col-sm-10">
                             <input type="text"  class="form-control" id="birthPlace" name="birthPlace" 
-                                   value="<?= $p->birthPlace ?>"  data-required="true">
-                            <span id="lastName-error" class="has-error help-block hidden">This field is required</span>
+                                   value="<?= $p->birthPlace ?>">
+                            
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="birthDate" class="col-sm-2 control-label">Date of birth *</label>
                         <div class="col-sm-10">
                             <input type="text"  class="form-control" id="birthDate" name="birthDate" 
-                                   value="<?= $p->birthDate ?>"  data-required="true" placeholder="mm/dd/yyyy">
-                            <span id="lastName-error" class="has-error help-block hidden">This field is required</span>
+                                   value="<?= $p->birthDate ?>"   placeholder="mm/dd/yyyy">
+                            
                         </div>
                     </div>
                     <div class="form-group">
@@ -220,8 +220,8 @@ and open the template in the editor.
                         <div class="col-sm-10">
                             <input type="text"  class="form-control" id="cf" name="cf" 
                                    value="<?= $p->cf ?>"
-                                   placeholder="the italian 'Codice Fiscale'" data-required="true">
-                            <span id="cf-error" class="has-error help-block hidden">This field is required</span>
+                                   placeholder="the italian 'Codice Fiscale'">
+                            
                         </div>
                     </div>
 
@@ -230,8 +230,8 @@ and open the template in the editor.
                         <div class="col-sm-10">
                             <input type="text"  class="form-control" id="idNumber" name="idNumber" 
                                    value="<?= $p->idNumber ?>"
-                                   placeholder="A valid ID or Passport number" data-required="true">
-                            <span id="idNumber-error" class="has-error help-block hidden">This field is required</span>
+                                   placeholder="A valid ID or Passport number" >
+                            
                         </div>
                     </div>
 
